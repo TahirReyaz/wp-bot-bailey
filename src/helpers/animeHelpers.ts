@@ -1,6 +1,7 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 import anilist from "anilist-node";
 import _ from "lodash";
+import { sendList } from "./baileyHelpers";
 
 const Anilist = new anilist();
 
@@ -10,28 +11,30 @@ export const animeSearch = (
   query: string
 ) => {
   Anilist.searchEntry.anime(query).then((res) => {
-    const list = [
+    const sections: any = [
       {
         title: "Search Results",
         rows: [],
       },
     ];
-    console.log(res.media[0]);
-    // res.media.forEach((anime) => {
-    //   list[0].rows.push({
-    //     title: ".aid " + anime.id,
-    //     description: anime.title.english + "\n" + anime.title.romaji,
-    //   });
-    // });
-    // sendListMenu(
-    //   sock,
-    //   sendIn,
-    //   "Searched: " + query,
-    //   "Hi",
-    //   "Checkout the bottom menu for results",
-    //   "Search results",
-    //   list
-    // );
+
+    res.media.forEach((anime: any) => {
+      sections[0].rows.push({
+        title: ".aid " + anime.id,
+        description: anime.title.english + "\n" + anime.title.romaji,
+        rowId: anime.id,
+      });
+    });
+
+    const listMessage = {
+      text: `You searched: ${query}`,
+      footer: "Select an option to get details",
+      title: "Click on the button below to view the list",
+      buttonText: "Search Results",
+      sections,
+    };
+
+    sendList(sock, message, listMessage);
   });
 };
 

@@ -45,11 +45,13 @@ async function connectToWhatsApp() {
   });
 
   sock.ev.on("messages.upsert", async (m) => {
-    const convo = m.messages[0].message?.conversation;
+    const currentMessage = m.messages[0];
+    const convo = currentMessage.message?.conversation
+      ? currentMessage.message?.conversation
+      : currentMessage.message?.listResponseMessage?.title;
     if (convo && convo[0] === ".") {
-      console.log({ m: m.messages[0].message?.conversation });
-
-      readCommand(sock, m.messages[0], convo.substring(1));
+      console.log({ m: currentMessage.message });
+      readCommand(sock, currentMessage, convo.substring(1));
     }
   });
 }

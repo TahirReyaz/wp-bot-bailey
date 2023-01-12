@@ -1,4 +1,5 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
+import { sendList } from "../helpers/baileyHelpers";
 import { animeHanlder } from "./animeHandler";
 import { infoHandler } from "./infoHandler";
 import { queryHandler } from "./queryHandler";
@@ -80,10 +81,7 @@ export const readCommand = async (
         message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
         templateMessage
       );
-
     case "list":
-      console.log("in list");
-      // send a list message!
       const sections = [
         {
           title: "Section 1",
@@ -116,18 +114,8 @@ export const readCommand = async (
         buttonText: "Required, text on the button to view the list",
         sections,
       };
-
-      const listRes = await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
-        listMessage
-      );
-
-      console.log({ listRes: listRes?.message });
-
+      sendList(sock, message, listMessage);
       break;
-
     case "img":
       await sock.sendMessage(
         message && message.key && message.key.remoteJid
