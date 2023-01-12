@@ -1,4 +1,4 @@
-export const queryHandler = async (command: string) => {
+export const queryHandler = (command: string) => {
   const queryArray = command.split(" ");
   queryArray[0] = queryArray[0].toLowerCase();
   const queryCutter = queryArray[0] + " ";

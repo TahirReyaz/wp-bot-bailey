@@ -14,7 +14,6 @@ logger.level = "trace";
 async function connectToWhatsApp() {
   const { state, saveCreds } = await useMultiFileAuthState("baileys_auth_info");
   const sock = makeWASocket({
-    // can provide additional config here
     printQRInTerminal: true,
     auth: {
       creds: state.creds,

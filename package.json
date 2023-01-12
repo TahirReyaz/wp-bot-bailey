@@ -7,10 +7,14 @@
     "@adiwajshing/baileys": "^5.0.0",
     "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.0",
+    "anilist-node": "^1.13.1",
     "axios": "^1.2.2",
+    "lodash": "^4.17.21",
     "qrcode-terminal": "^0.12.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/lodash": "^4.14.191"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
