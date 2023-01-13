@@ -1,7 +1,6 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 import anilist from "anilist-node";
 import _ from "lodash";
-import { sendList } from "./baileyHelpers";
 
 const Anilist = new anilist();
 

@@ -1,5 +1,6 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 
+import { truthOrDare, wouldYouRather } from "../helpers/gamesHelper";
 import { queryHandler } from "./queryHandler";
 
 export const gamesHandler = async (
@@ -7,22 +8,22 @@ export const gamesHandler = async (
   message: proto.IWebMessageInfo,
   command: string
 ) => {
-  const { queryArray, query } = queryHandler(command);
+  const { queryArray } = queryHandler(command);
   switch (queryArray[0]) {
     ///////////////////////////////TRUTH OR DARE: TRUTH///////////////////////////////
-    case ".truth":
+    case "truth":
     case "bottruth":
-      //   truthOrDare(client, message.chatId, "Truth");
+      truthOrDare(sock, message, "Truth");
       break;
     ////////////////////////////////TRUTH OR DARE: DARE///////////////////////////////
-    case ".dare":
+    case "dare":
     case "botdare":
-      //   truthOrDare(client, message.chatId, "Dare");
+      truthOrDare(sock, message, "Dare");
       break;
     /////////////////////////////////WOULD YOU RATHER/////////////////////////////////
-    case ".wyr":
+    case "wyr":
     case "botwyr":
-      //   wouldYouRather(client, message.chatId);
+      wouldYouRather(sock, message);
       break;
   }
 };

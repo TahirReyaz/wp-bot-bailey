@@ -10,7 +10,8 @@
     "anilist-node": "^1.13.1",
     "axios": "^1.2.2",
     "lodash": "^4.17.21",
-    "qrcode-terminal": "^0.12.0"
+    "qrcode-terminal": "^0.12.0",
+    "wyr": "^1.1.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191"
