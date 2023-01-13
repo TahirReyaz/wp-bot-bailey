@@ -246,29 +246,29 @@ export const mangaSearch = (
   message: proto.IWebMessageInfo,
   query: string
 ) => {
-  //   Anilist.searchEntry.manga(query, null, 1, 50).then((data) => {
-  //     const list = [
-  //       {
-  //         title: "Search Results",
-  //         rows: [],
-  //       },
-  //     ];
-  //     data.media.forEach((manga) => {
-  //       list[0].rows.push({
-  //         title: "mangaDetail " + manga.id,
-  //         description: manga.title.romaji + "\n" + manga.title.userPreferred,
-  //       });
-  //     });
-  //     sendListMenu(
-  //       sock,
-  //       sendIn,
-  //       "Searched: " + query,
-  //       "Hi",
-  //       "Checkout the bottom menu for results",
-  //       "Search results",
-  //       list
-  //     );
-  //   });
+  Anilist.searchEntry.manga(query, undefined, 1, 50).then((data) => {
+    const sections: any = [
+      {
+        title: "Search Results",
+        rows: [],
+      },
+    ];
+    data.media.forEach((manga: any) => {
+      sections[0].rows.push({
+        title: ".mgd " + manga.id,
+        description: manga.title.romaji + "\n" + manga.title.userPreferred,
+      });
+    });
+    const listMessage = {
+      text: `You searched: ${query}`,
+      footer: "Select an option to get details",
+      title: "Click on the button below to view the list",
+      buttonText: "Search Results",
+      sections,
+    };
+
+    sendList(sock, message, listMessage);
+  });
 };
 
 export const mangaDetailsById = (
