@@ -10,7 +10,7 @@ export const animeSearch = (
   message: proto.IWebMessageInfo,
   query: string
 ) => {
-  Anilist.searchEntry.anime(query).then((res) => {
+  Anilist.searchEntry.anime(query).then(async (res) => {
     const sections: any = [
       {
         title: "Search Results",
@@ -32,9 +32,15 @@ export const animeSearch = (
       title: "Click on the button below to view the list",
       buttonText: "Search Results",
       sections,
+      viewOnce: true,
     };
 
-    sendList(sock, message, listMessage);
+    await sock.sendMessage(
+      message && message.key && message.key.remoteJid
+        ? message.key.remoteJid
+        : "meh",
+      listMessage
+    );
   });
 };
 
@@ -63,7 +69,16 @@ export const animeDetail = (
         `*Description* : ${data.description}`,
       ]
     );
-    // Send the result
+    // Send the warning
+    await sock.sendMessage(
+      message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+      {
+        text: "As the current service's image processing is slow, the result might take some time or may not be sent at all",
+      },
+      { quoted: message }
+    );
+
+    // send the result
     await sock.sendMessage(
       message && message.key && message.key.remoteJid
         ? message.key.remoteJid
@@ -217,7 +232,7 @@ export const searchCharacterDetail = (
   message: proto.IWebMessageInfo,
   query: string
 ) => {
-  Anilist.searchEntry.character(query, 1, 30).then((data) => {
+  Anilist.searchEntry.character(query, 1, 30).then(async (data) => {
     const sections: any = [
       {
         title: "Search Results",
@@ -236,8 +251,14 @@ export const searchCharacterDetail = (
       title: "Click on the button below to view the list",
       buttonText: "Search Results",
       sections,
+      viewOnce: true,
     };
-    sendList(sock, message, listMessage);
+    await sock.sendMessage(
+      message && message.key && message.key.remoteJid
+        ? message.key.remoteJid
+        : "meh",
+      listMessage
+    );
   });
 };
 
@@ -246,7 +267,7 @@ export const mangaSearch = (
   message: proto.IWebMessageInfo,
   query: string
 ) => {
-  Anilist.searchEntry.manga(query, undefined, 1, 50).then((data) => {
+  Anilist.searchEntry.manga(query, undefined, 1, 50).then(async (data) => {
     const sections: any = [
       {
         title: "Search Results",
@@ -265,9 +286,15 @@ export const mangaSearch = (
       title: "Click on the button below to view the list",
       buttonText: "Search Results",
       sections,
+      viewOnce: true,
     };
 
-    sendList(sock, message, listMessage);
+    await sock.sendMessage(
+      message && message.key && message.key.remoteJid
+        ? message.key.remoteJid
+        : "meh",
+      listMessage
+    );
   });
 };
 

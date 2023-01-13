@@ -34,12 +34,8 @@ export const readCommand = async (
         footer: "Hello World",
         buttons: buttons,
         headerType: 1,
+        viewOnce: true,
       };
-
-      await sock.sendMessage(
-        message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
-        { text: "Sending buttons" }
-      );
 
       await sock.sendMessage(
         message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
@@ -47,40 +43,41 @@ export const readCommand = async (
       );
 
       //send a template message!
-      const templateButtons = [
-        {
-          index: 1,
-          urlButton: {
-            displayText: "⭐ Star Baileys on GitHub!",
-            url: "https://github.com/adiwajshing/Baileys",
-          },
-        },
-        {
-          index: 2,
-          callButton: {
-            displayText: "Call me!",
-            phoneNumber: "+1 (234) 5678-901",
-          },
-        },
-        {
-          index: 3,
-          quickReplyButton: {
-            displayText: "This is a reply, just like normal buttons!",
-            id: "id-like-buttons-message",
-          },
-        },
-      ];
+      // const templateButtons = [
+      //   {
+      //     index: 1,
+      //     urlButton: {
+      //       displayText: "⭐ Star Baileys on GitHub!",
+      //       url: "https://github.com/adiwajshing/Baileys",
+      //     },
+      //   },
+      //   {
+      //     index: 2,
+      //     callButton: {
+      //       displayText: "Call me!",
+      //       phoneNumber: "+1 (234) 5678-901",
+      //     },
+      //   },
+      //   {
+      //     index: 3,
+      //     quickReplyButton: {
+      //       displayText: "This is a reply, just like normal buttons!",
+      //       id: "id-like-buttons-message",
+      //     },
+      //   },
+      // ];
 
-      const templateMessage = {
-        text: "Hi it's a template message",
-        footer: "Hello World",
-        templateButtons: templateButtons,
-      };
+      // const templateMessage = {
+      //   text: "Hi it's a template message",
+      //   footer: "Hello World",
+      //   templateButtons: templateButtons,
+      // };
 
-      await sock.sendMessage(
-        message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
-        templateMessage
-      );
+      // await sock.sendMessage(
+      //   message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+      //   templateMessage
+      // );
+      break;
     case "list":
       const sections = [
         {
@@ -113,8 +110,14 @@ export const readCommand = async (
         title: "Amazing boldfaced list title",
         buttonText: "Required, text on the button to view the list",
         sections,
+        viewOnce: true,
       };
-      sendList(sock, message, listMessage);
+      await sock.sendMessage(
+        message && message.key && message.key.remoteJid
+          ? message.key.remoteJid
+          : "meh",
+        listMessage
+      );
       break;
     case "img":
       await sock.sendMessage(
@@ -128,5 +131,6 @@ export const readCommand = async (
           caption: "meh",
         }
       );
+      break;
   }
 };
