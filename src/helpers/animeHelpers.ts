@@ -217,29 +217,28 @@ export const searchCharacterDetail = (
   message: proto.IWebMessageInfo,
   query: string
 ) => {
-  //   Anilist.searchEntry.character(query, 1, 30).then((data) => {
-  //     const list = [
-  //       {
-  //         title: "Search Results",
-  //         rows: [],
-  //       },
-  //     ];
-  //     data.characters.forEach((character) => {
-  //       list[0].rows.push({
-  //         title: ".cid " + character.id,
-  //         description: character.name.english,
-  //       });
-  //     });
-  //     sendListMenu(
-  //       sock,
-  //       sendIn,
-  //       "Searched: " + query,
-  //       "Hi",
-  //       "Checkout the bottom menu for results",
-  //       "Search results",
-  //       list
-  //     );
-  //   });
+  Anilist.searchEntry.character(query, 1, 30).then((data) => {
+    const sections: any = [
+      {
+        title: "Search Results",
+        rows: [],
+      },
+    ];
+    data.characters.forEach((character: any) => {
+      sections[0].rows.push({
+        title: ".cid " + character.id,
+        description: character.name.english,
+      });
+    });
+    const listMessage = {
+      text: `You searched: ${query}`,
+      footer: "Select an option to get details",
+      title: "Click on the button below to view the list",
+      buttonText: "Search Results",
+      sections,
+    };
+    sendList(sock, message, listMessage);
+  });
 };
 
 export const mangaSearch = (
