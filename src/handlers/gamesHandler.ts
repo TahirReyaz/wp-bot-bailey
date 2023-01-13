@@ -1,6 +1,6 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 
-import { truthOrDare, wouldYouRather } from "../helpers/gamesHelper";
+import { truthOrDare, wouldYouRather } from "../helpers/gameHelpers";
 import { queryHandler } from "./queryHandler";
 
 export const gamesHandler = async (

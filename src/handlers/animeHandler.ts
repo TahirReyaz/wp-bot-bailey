@@ -43,7 +43,6 @@ export const animeHanlder = async (
       break;
     ///////////////////////////ANIME STAFF DETAIL- BY ID//////////////////////////
     case "asid":
-    case "staffdetails":
       animeStaffDetails(sock, message, query);
       break;
   }

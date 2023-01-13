@@ -334,5 +334,10 @@ export const infoHandler = async (
     //       console.log(error);
     //     });
     //   break;
+    case ".tahir":
+    case ".about":
+    case ".dev":
+      // give details about yourself and the code
+      break;
   }
 };

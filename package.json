@@ -2,7 +2,7 @@
   "name": "wp-bot-baily-test",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/index.ts",
   "dependencies": {
     "@adiwajshing/baileys": "^5.0.0",
     "@adiwajshing/keyed-db": "^0.2.4",
@@ -17,7 +17,8 @@
     "@types/lodash": "^4.14.191"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node build/src/index.js"
   },
   "author": "",
   "license": "ISC"
