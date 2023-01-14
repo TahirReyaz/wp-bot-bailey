@@ -68,7 +68,7 @@ export const animeDetail = (
     );
     // Send the warning
     await sock.sendMessage(
-      message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       {
         text: "As the current service's image processing is slow, the result might take some time or may not be sent at all",
       },

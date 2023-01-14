@@ -35,7 +35,7 @@ export const truthOrDare = async (
     viewOnce: true,
   };
   await sock.sendMessage(
-    message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+    message?.key?.remoteJid ? message.key.remoteJid : "meh",
     buttonMessage
   );
 };
@@ -84,7 +84,7 @@ export const wouldYouRather = (
       };
 
       await sock.sendMessage(
-        message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         buttonMessage
       );
     })
@@ -116,7 +116,7 @@ export const wouldYouRather = (
       };
 
       await sock.sendMessage(
-        message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         buttonMessage
       );
 

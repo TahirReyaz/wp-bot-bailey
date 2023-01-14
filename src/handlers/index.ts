@@ -22,7 +22,7 @@ export const readCommand = async (
     //////////////////////////////////////HI BOT//////////////////////////////////////
     case "hi":
       await sock.sendMessage(
-        message.key && message.key.remoteJid ? message.key.remoteJid : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         { text: "All hail the bot!" },
         { quoted: message }
       );
