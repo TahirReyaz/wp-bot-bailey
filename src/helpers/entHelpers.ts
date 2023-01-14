@@ -57,9 +57,7 @@ export const movieDetail = (
         if (response.data.Poster === "N/A") {
           // If there is no poster then send only the details
           await sock.sendMessage(
-            message && message.key && message.key.remoteJid
-              ? message.key.remoteJid
-              : "meh",
+            message?.key?.remoteJid ? message.key.remoteJid : "meh",
             {
               text: composeMsg.join(""),
             }
@@ -67,9 +65,7 @@ export const movieDetail = (
         } else {
           // If there is a poster then send the details with the poster
           await sock.sendMessage(
-            message && message.key && message.key.remoteJid
-              ? message.key.remoteJid
-              : "meh",
+            message?.key?.remoteJid ? message.key.remoteJid : "meh",
             {
               image: {
                 url: response.data.Poster,
@@ -81,9 +77,7 @@ export const movieDetail = (
       } else {
         // If movie/ series is not found
         await sock.sendMessage(
-          message && message.key && message.key.remoteJid
-            ? message.key.remoteJid
-            : "meh",
+          message?.key?.remoteJid ? message.key.remoteJid : "meh",
           {
             text: "Movie/ Series not found.. Sorry. Check the spelling",
           }
@@ -128,9 +122,7 @@ export const songDetail = (
       ];
       // Send the response to the sender
       await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         {
           image: {
             url: song.artwork,
@@ -141,9 +133,7 @@ export const songDetail = (
     })
     .catch(async () => {
       await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         {
           text: "Song not found\n-Add Artist too\n-Check the syntax and spelling",
         }
@@ -179,9 +169,7 @@ export const searchLyrics = (
       ];
       // Send the response to the sender
       await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         {
           text: composeMsg.join(""),
         }
@@ -189,9 +177,7 @@ export const searchLyrics = (
     })
     .catch(async () => {
       await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         {
           text: "Lyrics not found\n-Add Artist too\n-Check the syntax and spelling",
         }
@@ -269,9 +255,7 @@ export const sendHoroscopeMenu = async (
   };
 
   await sock.sendMessage(
-    message && message.key && message.key.remoteJid
-      ? message.key.remoteJid
-      : "meh",
+    message?.key?.remoteJid ? message.key.remoteJid : "meh",
     listMessage
   );
 };
@@ -306,9 +290,7 @@ export const sendHoroscope = async (
         ];
 
         await sock.sendMessage(
-          message && message.key && message.key.remoteJid
-            ? message.key.remoteJid
-            : "meh",
+          message?.key?.remoteJid ? message.key.remoteJid : "meh",
           {
             text: composeMsg.join(""),
           }
@@ -316,9 +298,7 @@ export const sendHoroscope = async (
       })
       .catch(async (error) => {
         await sock.sendMessage(
-          message && message.key && message.key.remoteJid
-            ? message.key.remoteJid
-            : "meh",
+          message?.key?.remoteJid ? message.key.remoteJid : "meh",
           {
             text: "An error occurred\nCheck spellings and syntax",
           }
@@ -328,9 +308,7 @@ export const sendHoroscope = async (
       });
   } else {
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       {
         text: "Please enter a valid sign",
       }

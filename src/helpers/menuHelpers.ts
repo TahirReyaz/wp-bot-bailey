@@ -267,9 +267,7 @@ export const sendMenu = async (
   };
 
   await sock.sendMessage(
-    message && message.key && message.key.remoteJid
-      ? message.key.remoteJid
-      : "meh",
+    message?.key?.remoteJid ? message.key.remoteJid : "meh",
     listMessage
   );
 };

@@ -35,9 +35,7 @@ export const animeSearch = (
     };
 
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       listMessage
     );
   });
@@ -79,9 +77,7 @@ export const animeDetail = (
 
     // send the result
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       {
         image: {
           url: data.coverImage.large,
@@ -180,9 +176,7 @@ export const charDetailById = (
       ]
     );
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       {
         image: {
           url: data.image.large,
@@ -213,9 +207,7 @@ export const animeStaffDetails = (
       ]
     );
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       {
         image: {
           url: data.image.large,
@@ -253,9 +245,7 @@ export const searchCharacterDetail = (
       viewOnce: true,
     };
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       listMessage
     );
   });
@@ -289,9 +279,7 @@ export const mangaSearch = (
     };
 
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       listMessage
     );
   });
@@ -325,9 +313,7 @@ export const mangaDetailsById = (
       );
       // Send the result
       await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         {
           image: {
             url: data.coverImage.large,
@@ -405,9 +391,7 @@ export const mangaDetailsById = (
       //     );
     } else {
       await sock.sendMessage(
-        message && message.key && message.key.remoteJid
-          ? message.key.remoteJid
-          : "meh",
+        message?.key?.remoteJid ? message.key.remoteJid : "meh",
         {
           text: `*Error* : ${data[0].status} ${data[0].message}`,
         }

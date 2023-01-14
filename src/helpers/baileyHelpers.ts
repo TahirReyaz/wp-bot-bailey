@@ -5,16 +5,11 @@ export const sendList = async (
   message: proto.IWebMessageInfo,
   list: AnyMessageContent
 ) => {
-  let chatId =
-    message && message.key && message.key.remoteJid
-      ? message.key.remoteJid
-      : "meh";
+  let chatId = message?.key?.remoteJid ? message.key.remoteJid : "meh";
   if (message.key.participant) {
     // send message that in dm
     await sock.sendMessage(
-      message && message.key && message.key.remoteJid
-        ? message.key.remoteJid
-        : "meh",
+      message?.key?.remoteJid ? message.key.remoteJid : "meh",
       {
         text: "As the current service doesn't support lists in groups, I have sent you the list in your DM",
       }
