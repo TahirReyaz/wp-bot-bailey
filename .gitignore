@@ -2,3 +2,4 @@ node_modules
 baileys*
 build
 temp
+.env

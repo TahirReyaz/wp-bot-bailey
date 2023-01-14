@@ -1,6 +1,7 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 import { sendList } from "../helpers/baileyHelpers";
 import { animeHanlder } from "./animeHandler";
+import { entHandler } from "./entHandler";
 import { gamesHandler } from "./gamesHandler";
 import { infoHandler } from "./infoHandler";
 import { menuHandler } from "./menuHandler";
@@ -16,6 +17,7 @@ export const readCommand = async (
   animeHanlder(sock, message, command);
   gamesHandler(sock, message, command);
   menuHandler(sock, message, command);
+  entHandler(sock, message, command);
   switch (queryArray[0]) {
     //////////////////////////////////////HI BOT//////////////////////////////////////
     case "hi":
