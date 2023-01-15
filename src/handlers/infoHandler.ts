@@ -21,7 +21,7 @@ export const infoHandler = async (
         .get(mathsEndpoint + encodeURIComponent(query) + "&precision=3")
         .then(async (response) => {
           await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
+            chatId,
             { text: response.data.toString() },
             { quoted: message }
           );
@@ -30,7 +30,7 @@ export const infoHandler = async (
           console.log(error.response.data);
 
           await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
+            chatId,
             { text: error.response.data },
             { quoted: message }
           );
@@ -136,7 +136,7 @@ export const infoHandler = async (
           ];
           // Send the response to the sender
           await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
+            chatId,
             { text: composeMsg.join("") },
             { quoted: message }
           );
@@ -144,7 +144,7 @@ export const infoHandler = async (
         .catch(async () => {
           // Send not found to sender
           await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
+            chatId,
             { text: "Word not found.. Sorry" },
             { quoted: message }
           );
@@ -176,7 +176,7 @@ export const infoHandler = async (
             );
             // Send the response to the sender
             await sock.sendMessage(
-              message?.key?.remoteJid ? message.key.remoteJid : "meh",
+              chatId,
               { text: composeMsg.join("") },
               { quoted: message }
             );
@@ -184,7 +184,7 @@ export const infoHandler = async (
         })
         .catch(async (err) => {
           await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
+            chatId,
             {
               text:
                 err.response.data.message +
@@ -329,7 +329,7 @@ export const infoHandler = async (
       ];
       // Send the response to the sender
       await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
+        chatId,
         { text: composeMsg.join("\n") },
         { quoted: message }
       );

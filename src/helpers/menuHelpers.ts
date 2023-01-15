@@ -22,10 +22,10 @@ const botMenuList = [
       //   description:
       //     "For setting a reminder (In 24 hour format). Bot remind you at the specified time. Write the additional message in the next line",
       // },
-      // {
-      //   title: "@everyone <message>",
-      //   description: "For tagging everyone like discord",
-      // },
+      {
+        title: "@everyone",
+        description: "For tagging everyone like discord",
+      },
       // {
       //   title: ".sticker",
       //   description:
@@ -36,10 +36,10 @@ const botMenuList = [
       //   description:
       //     "To extract the feelings from a text using machine learning. Reply to a text message with *.feel*",
       // },
-      // {
-      //   title: "horoscopeMenu",
-      //   description: "For checking out today's Horoscope\nShort command: .hsm",
-      // },
+      {
+        title: "horoscopeMenu",
+        description: "For checking out today's Horoscope\nShort command: .hsm",
+      },
       // {
       //   title: "GroupRoles",
       //   description: "For activating certain commands in a group (Admin only)",
@@ -54,11 +54,11 @@ const botMenuList = [
         description:
           "To get help and commands related to Games like truth or dare, Would you rather etc.",
       },
-      // {
-      //   title: "EntHelp ",
-      //   description:
-      //     "To get Entertainment related commands like movie, song, anime detail and lyrics",
-      // },
+      {
+        title: ".ehelp ",
+        description:
+          "To get Entertainment related commands like movie, song, anime detail and lyrics",
+      },
       {
         title: ".ahelp ",
         description: "To get help and commands related to Anime",
@@ -220,9 +220,9 @@ const roleMenuMsg = [
 
 export const sendMenu = async (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   title: string,
-  type: string
+  type: string,
+  chatId: string
 ) => {
   let sections, msg;
 
@@ -266,8 +266,5 @@ export const sendMenu = async (
     viewOnce: true,
   };
 
-  await sock.sendMessage(
-    message?.key?.remoteJid ? message.key.remoteJid : "meh",
-    listMessage
-  );
+  await sock.sendMessage(chatId, listMessage);
 };

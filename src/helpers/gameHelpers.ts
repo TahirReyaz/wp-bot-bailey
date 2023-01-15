@@ -5,8 +5,8 @@ import truthOrDareFile from "../../data/truth-or-dare";
 
 export const truthOrDare = async (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
-  type: string
+  type: string,
+  chatId: string
 ) => {
   let resId,
     res,
@@ -34,16 +34,10 @@ export const truthOrDare = async (
     headerType: 1,
     viewOnce: true,
   };
-  await sock.sendMessage(
-    message?.key?.remoteJid ? message.key.remoteJid : "meh",
-    buttonMessage
-  );
+  await sock.sendMessage(chatId, buttonMessage);
 };
 
-export const wouldYouRather = (
-  sock: WASocket,
-  message: proto.IWebMessageInfo
-) => {
+export const wouldYouRather = (sock: WASocket, chatId: string) => {
   let msgString = "";
   wyr()
     .then(async (response: any) => {
@@ -83,10 +77,7 @@ export const wouldYouRather = (
         viewOnce: true,
       };
 
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        buttonMessage
-      );
+      await sock.sendMessage(chatId, buttonMessage);
     })
     .catch(async (err) => {
       // Send not found to sender
@@ -115,10 +106,7 @@ export const wouldYouRather = (
         viewOnce: true,
       };
 
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        buttonMessage
-      );
+      await sock.sendMessage(chatId, buttonMessage);
 
       console.error(err);
     });

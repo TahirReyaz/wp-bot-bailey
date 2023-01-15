@@ -20,11 +20,11 @@ export const animeHanlder = async (
   switch (queryArray[0]) {
     ///////////////////////////////////ANIME DETAIL///////////////////////////////////
     case "ad":
-      animeSearch(sock, message, query, chatId);
+      animeSearch(sock, query, chatId);
       break;
     ///////////////////////////////////MANGA DETAIL///////////////////////////////////
     case "ms":
-      mangaSearch(sock, message, query, chatId);
+      mangaSearch(sock, query, chatId);
       break;
     ////////////////////////////////////ANIME DETAIL BY ID/////////////////////////////////////
     case "aid":
@@ -36,7 +36,7 @@ export const animeHanlder = async (
       break;
     /////////////////////////ANIME CHARACTER DETAIL- BY SEARCH////////////////////////
     case "cd":
-      searchCharacterDetail(sock, message, query, chatId);
+      searchCharacterDetail(sock, query, chatId);
       break;
     ///////////////////////////ANIME CHARACTER DETAIL- BY ID//////////////////////////
     case "cid":

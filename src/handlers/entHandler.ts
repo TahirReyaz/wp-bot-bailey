@@ -11,7 +11,6 @@ import { queryHandler } from "./queryHandler";
 
 export const entHandler = async (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   command: string,
   chatId: string
 ) => {
@@ -25,26 +24,26 @@ export const entHandler = async (
     ////////////////////////////////////MOVIE DETAIL//////////////////////////////////
     case "md":
     case "moviedetail":
-      movieDetail(sock, message, query);
+      movieDetail(sock, query, chatId);
       break;
     /////////////////////////////////////SONG DETAIL//////////////////////////////////
     case "sd":
     case "songdetail":
-      songDetail(sock, message, songParams);
+      songDetail(sock, songParams, chatId);
       break;
     /////////////////////////////////////SONG LYRICS//////////////////////////////////
     case "lyrics":
-      searchLyrics(sock, message, songParams, query);
+      searchLyrics(sock, songParams, query, chatId);
       break;
     /////////////////////////////////////HOROSCOPE MENU/////////////////////////////////////
     case "hsmenu":
     case "hsm":
     case "horoscopemenu":
-      sendHoroscopeMenu(sock, message);
+      sendHoroscopeMenu(sock, chatId);
       break;
     ///////////////////////////////////HOROSCOPE ////////////////////////////////////
     case "hs":
-      sendHoroscope(sock, message, queryPart, queryArray);
+      sendHoroscope(sock, queryPart, queryArray, chatId);
       break;
   }
 };

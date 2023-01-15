@@ -4,12 +4,7 @@ import _ from "lodash";
 
 const Anilist = new anilist();
 // remove message argument wherever not needed
-export const animeSearch = (
-  sock: WASocket,
-  message: proto.IWebMessageInfo,
-  query: string,
-  chatId: string
-) => {
+export const animeSearch = (sock: WASocket, query: string, chatId: string) => {
   Anilist.searchEntry.anime(query).then(async (res) => {
     const sections: any = [
       {
@@ -172,12 +167,16 @@ export const charDetailById = (
         `*Description* : ${data.description}`,
       ]
     );
-    await sock.sendMessage(chatId, {
-      image: {
-        url: data.image.large,
+    await sock.sendMessage(
+      chatId,
+      {
+        image: {
+          url: data.image.large,
+        },
+        caption: msg.join("\n"),
       },
-      caption: msg.join("\n"),
-    });
+      { quoted: message }
+    );
   });
 };
 
@@ -201,18 +200,21 @@ export const animeStaffDetails = (
         `*Description* : ${data.description}`,
       ]
     );
-    await sock.sendMessage(chatId, {
-      image: {
-        url: data.image.large,
+    await sock.sendMessage(
+      chatId,
+      {
+        image: {
+          url: data.image.large,
+        },
+        caption: msg.join("\n"),
       },
-      caption: msg.join("\n"),
-    });
+      { quoted: message }
+    );
   });
 };
 
 export const searchCharacterDetail = (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   query: string,
   chatId: string
 ) => {
@@ -241,12 +243,7 @@ export const searchCharacterDetail = (
   });
 };
 
-export const mangaSearch = (
-  sock: WASocket,
-  message: proto.IWebMessageInfo,
-  query: string,
-  chatId: string
-) => {
+export const mangaSearch = (sock: WASocket, query: string, chatId: string) => {
   Anilist.searchEntry.manga(query, undefined, 1, 50).then(async (data) => {
     const sections: any = [
       {
@@ -301,12 +298,16 @@ export const mangaDetailsById = (
         ]
       );
       // Send the result
-      await sock.sendMessage(chatId, {
-        image: {
-          url: data.coverImage.large,
+      await sock.sendMessage(
+        chatId,
+        {
+          image: {
+            url: data.coverImage.large,
+          },
+          caption: msg.join("\n"),
         },
-        caption: msg.join("\n"),
-      });
+        { quoted: message }
+      );
       //     // Related Media
       //     const relatedAnimeList = [
       //       {

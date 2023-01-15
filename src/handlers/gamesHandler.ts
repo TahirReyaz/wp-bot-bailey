@@ -5,7 +5,6 @@ import { queryHandler } from "./queryHandler";
 
 export const gamesHandler = async (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   command: string,
   chatId: string
 ) => {
@@ -14,17 +13,17 @@ export const gamesHandler = async (
     ///////////////////////////////TRUTH OR DARE: TRUTH///////////////////////////////
     case "truth":
     case "bottruth":
-      truthOrDare(sock, message, "Truth");
+      truthOrDare(sock, "Truth", chatId);
       break;
     ////////////////////////////////TRUTH OR DARE: DARE///////////////////////////////
     case "dare":
     case "botdare":
-      truthOrDare(sock, message, "Dare");
+      truthOrDare(sock, "Dare", chatId);
       break;
     /////////////////////////////////WOULD YOU RATHER/////////////////////////////////
     case "wyr":
     case "botwyr":
-      wouldYouRather(sock, message);
+      wouldYouRather(sock, chatId);
       break;
   }
 };

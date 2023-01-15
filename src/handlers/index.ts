@@ -14,8 +14,8 @@ export const readCommand = async (
   const chatId: string = message?.key?.remoteJid || "meh";
   infoHandler(sock, message, command, chatId);
   animeHanlder(sock, message, command, chatId);
-  gamesHandler(sock, message, command, chatId);
-  menuHandler(sock, message, command, chatId);
-  entHandler(sock, message, command, chatId);
+  gamesHandler(sock, command, chatId);
+  menuHandler(sock, command, chatId);
+  entHandler(sock, command, chatId);
   miscHandler(sock, message, command, chatId);
 };

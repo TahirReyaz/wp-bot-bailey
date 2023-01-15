@@ -8,11 +8,7 @@ config();
 const omdbEndPoint =
   "https://www.omdbapi.com/?apikey=" + process.env.OMDB_API_KEY + "&t=";
 
-export const movieDetail = (
-  sock: WASocket,
-  message: proto.IWebMessageInfo,
-  query: string
-) => {
+export const movieDetail = (sock: WASocket, query: string, chatId: string) => {
   axios
     .get(omdbEndPoint + query)
     .then(async (response) => {
@@ -54,32 +50,23 @@ export const movieDetail = (
         // If the movie was found then send the details and poster
         if (response.data.Poster === "N/A") {
           // If there is no poster then send only the details
-          await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
-            {
-              text: composeMsg.join(""),
-            }
-          );
+          await sock.sendMessage(chatId, {
+            text: composeMsg.join(""),
+          });
         } else {
           // If there is a poster then send the details with the poster
-          await sock.sendMessage(
-            message?.key?.remoteJid ? message.key.remoteJid : "meh",
-            {
-              image: {
-                url: response.data.Poster,
-              },
-              caption: composeMsg.join(""),
-            }
-          );
+          await sock.sendMessage(chatId, {
+            image: {
+              url: response.data.Poster,
+            },
+            caption: composeMsg.join(""),
+          });
         }
       } else {
         // If movie/ series is not found
-        await sock.sendMessage(
-          message?.key?.remoteJid ? message.key.remoteJid : "meh",
-          {
-            text: "Movie/ Series not found.. Sorry. Check the spelling",
-          }
-        );
+        await sock.sendMessage(chatId, {
+          text: "Movie/ Series not found.. Sorry. Check the spelling",
+        });
       }
     })
     .catch((err) => {
@@ -89,11 +76,11 @@ export const movieDetail = (
 
 export const songDetail = (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   songParams: {
     title: string;
     artist: string;
-  }
+  },
+  chatId: string
 ) => {
   musicInfo
     .searchSong(songParams, 600)
@@ -119,34 +106,28 @@ export const songDetail = (
         "For example:\n*.lyrics Faded*",
       ];
       // Send the response to the sender
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        {
-          image: {
-            url: song.artwork,
-          },
-          caption: composeMsg.join(""),
-        }
-      );
+      await sock.sendMessage(chatId, {
+        image: {
+          url: song.artwork,
+        },
+        caption: composeMsg.join(""),
+      });
     })
     .catch(async () => {
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        {
-          text: "Song not found\n-Add Artist too\n-Check the syntax and spelling",
-        }
-      );
+      await sock.sendMessage(chatId, {
+        text: "Song not found\n-Add Artist too\n-Check the syntax and spelling",
+      });
     });
 };
 
 export const searchLyrics = (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   songParams: {
     title: string;
     artist: string;
   },
-  query: string
+  query: string,
+  chatId: string
 ) => {
   let composeMsg: string[] = [];
   musicInfo
@@ -166,27 +147,18 @@ export const searchLyrics = (
         "\nFor example:\n*SongDetail Faded Alan Walker*",
       ];
       // Send the response to the sender
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        {
-          text: composeMsg.join(""),
-        }
-      );
+      await sock.sendMessage(chatId, {
+        text: composeMsg.join(""),
+      });
     })
     .catch(async () => {
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        {
-          text: "Lyrics not found\n-Add Artist too\n-Check the syntax and spelling",
-        }
-      );
+      await sock.sendMessage(chatId, {
+        text: "Lyrics not found\n-Add Artist too\n-Check the syntax and spelling",
+      });
     });
 };
 
-export const sendHoroscopeMenu = async (
-  sock: WASocket,
-  message: proto.IWebMessageInfo
-) => {
+export const sendHoroscopeMenu = async (sock: WASocket, chatId: string) => {
   // Configuring the list menu
   const sections: any[] = [
     {
@@ -252,17 +224,14 @@ export const sendHoroscopeMenu = async (
     viewOnce: true,
   };
 
-  await sock.sendMessage(
-    message?.key?.remoteJid ? message.key.remoteJid : "meh",
-    listMessage
-  );
+  await sock.sendMessage(chatId, listMessage);
 };
 
 export const sendHoroscope = async (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   queryPart: string[],
-  botQuery: string[]
+  botQuery: string[],
+  chatId: string
 ) => {
   if (botQuery.length > 0) {
     const zodiacSign = queryPart[0].toLowerCase();
@@ -287,29 +256,20 @@ export const sendHoroscope = async (
           `\n\n_${_.upperFirst(queryPart[0])}: ${data.date_range}_`,
         ];
 
-        await sock.sendMessage(
-          message?.key?.remoteJid ? message.key.remoteJid : "meh",
-          {
-            text: composeMsg.join(""),
-          }
-        );
+        await sock.sendMessage(chatId, {
+          text: composeMsg.join(""),
+        });
       })
       .catch(async (error) => {
-        await sock.sendMessage(
-          message?.key?.remoteJid ? message.key.remoteJid : "meh",
-          {
-            text: "An error occurred\nCheck spellings and syntax",
-          }
-        );
+        await sock.sendMessage(chatId, {
+          text: "An error occurred\nCheck spellings and syntax",
+        });
 
         console.error(error);
       });
   } else {
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      {
-        text: "Please enter a valid sign",
-      }
-    );
+    await sock.sendMessage(chatId, {
+      text: "Please enter a valid sign",
+    });
   }
 };

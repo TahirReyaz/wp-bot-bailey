@@ -5,7 +5,6 @@ import { queryHandler } from "./queryHandler";
 
 export const menuHandler = async (
   sock: WASocket,
-  message: proto.IWebMessageInfo,
   command: string,
   chatId: string
 ) => {
@@ -13,32 +12,27 @@ export const menuHandler = async (
   switch (queryArray[0]) {
     /////////////////////////////////////BOT MENU/////////////////////////////////////
     case "help":
-      sendMenu(sock, message, "Help and all commands", "Help");
+      sendMenu(sock, "Help and all commands", "Help", chatId);
       break;
     ////////////////////////////////ENTERTAINMENT MENU////////////////////////////////
     case "ehelp":
-      sendMenu(
-        sock,
-        message,
-        "Entertainment and Media related commands",
-        "Ent"
-      );
+      sendMenu(sock, "Entertainment and Media related commands", "Ent", chatId);
       break;
     /////////////////////////////////INFORMATION MENU/////////////////////////////////
     case "ihelp":
-      sendMenu(sock, message, "Info related commands", "Info");
+      sendMenu(sock, "Info related commands", "Info", chatId);
       break;
     ////////////////////////////////////GAMES MENU///////////////////////////////////
     case "ghelp":
-      sendMenu(sock, message, "Commands for Games", "Game");
+      sendMenu(sock, "Commands for Games", "Game", chatId);
       break;
     ///////////////////////////////////ANIME MENU////////////////////////////////////
     case "ahelp":
-      sendMenu(sock, message, "Anime related commands", "Anime");
+      sendMenu(sock, "Anime related commands", "Anime", chatId);
       break;
     ///////////////////////////////////ROLES MENU////////////////////////////////////
     case "rhelp":
-      sendMenu(sock, message, "Roles related commands", "Role");
+      sendMenu(sock, "Roles related commands", "Role", chatId);
       break;
   }
 };
