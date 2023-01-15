@@ -6,14 +6,13 @@ import { queryHandler } from "./queryHandler";
 export const infoHandler = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  command: string
+  command: string,
+  chatId: string
 ) => {
   const wikiEndpoint = "https://en.wikipedia.org/w/api.php?";
   const mathsEndpoint = "http://api.mathjs.org/v4/?expr=";
 
-  const { queryArray, queryWithDesc, query, queryPart } = await queryHandler(
-    command
-  );
+  const { queryArray, queryWithDesc, query, queryPart } = queryHandler(command);
 
   switch (queryArray[0]) {
     ////////////////////////////////////CALCULATE//////////////////////////////////////

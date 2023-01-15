@@ -12,7 +12,8 @@ import { queryHandler } from "./queryHandler";
 export const entHandler = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  command: string
+  command: string,
+  chatId: string
 ) => {
   const { queryArray, queryPart, query } = queryHandler(command);
   const songParams = {

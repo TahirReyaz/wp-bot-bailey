@@ -8,8 +8,6 @@ config();
 const omdbEndPoint =
   "https://www.omdbapi.com/?apikey=" + process.env.OMDB_API_KEY + "&t=";
 
-console.log({ api: process.env.OMDB_API_KEY });
-
 export const movieDetail = (
   sock: WASocket,
   message: proto.IWebMessageInfo,

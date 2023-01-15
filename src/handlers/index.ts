@@ -1,31 +1,21 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
-import { sendList } from "../helpers/baileyHelpers";
 import { animeHanlder } from "./animeHandler";
 import { entHandler } from "./entHandler";
 import { gamesHandler } from "./gamesHandler";
 import { infoHandler } from "./infoHandler";
 import { menuHandler } from "./menuHandler";
-import { queryHandler } from "./queryHandler";
+import { miscHandler } from "./miscHandler";
 
 export const readCommand = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   command: string
 ) => {
-  const { queryArray } = queryHandler(command);
-  infoHandler(sock, message, command);
-  animeHanlder(sock, message, command);
-  gamesHandler(sock, message, command);
-  menuHandler(sock, message, command);
-  entHandler(sock, message, command);
-  switch (queryArray[0]) {
-    //////////////////////////////////////HI BOT//////////////////////////////////////
-    case "hi":
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        { text: "All hail the bot!" },
-        { quoted: message }
-      );
-      break;
-  }
+  const chatId: string = message?.key?.remoteJid || "meh";
+  infoHandler(sock, message, command, chatId);
+  animeHanlder(sock, message, command, chatId);
+  gamesHandler(sock, message, command, chatId);
+  menuHandler(sock, message, command, chatId);
+  entHandler(sock, message, command, chatId);
+  miscHandler(sock, message, command, chatId);
 };

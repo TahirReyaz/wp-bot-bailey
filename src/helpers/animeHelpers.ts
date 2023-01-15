@@ -3,11 +3,12 @@ import anilist from "anilist-node";
 import _ from "lodash";
 
 const Anilist = new anilist();
-
+// remove message argument wherever not needed
 export const animeSearch = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  query: string
+  query: string,
+  chatId: string
 ) => {
   Anilist.searchEntry.anime(query).then(async (res) => {
     const sections: any = [
@@ -34,17 +35,15 @@ export const animeSearch = (
       viewOnce: true,
     };
 
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      listMessage
-    );
+    await sock.sendMessage(chatId, listMessage);
   });
 };
 
 export const animeDetail = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  id: string
+  id: string,
+  chatId: string
 ) => {
   let msg: any = [];
   Anilist.media.anime(Number(id)).then(async (data: any) => {
@@ -68,7 +67,7 @@ export const animeDetail = (
     );
     // Send the warning
     await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
+      chatId,
       {
         text: "As the current service's image processing is slow, the result might take some time or may not be sent at all",
       },
@@ -76,15 +75,12 @@ export const animeDetail = (
     );
 
     // send the result
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      {
-        image: {
-          url: data.coverImage.large,
-        },
-        caption: msg.join("\n"),
-      }
-    );
+    await sock.sendMessage(chatId, {
+      image: {
+        url: data.coverImage.large,
+      },
+      caption: msg.join("\n"),
+    });
     // Related Media
     // const relatedAnimeList = [
     //   {
@@ -160,7 +156,8 @@ export const animeDetail = (
 export const charDetailById = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  id: string
+  id: string,
+  chatId: string
 ) => {
   Anilist.people.character(Number(id)).then(async (data: any) => {
     const msg = [];
@@ -175,22 +172,20 @@ export const charDetailById = (
         `*Description* : ${data.description}`,
       ]
     );
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      {
-        image: {
-          url: data.image.large,
-        },
-        caption: msg.join("\n"),
-      }
-    );
+    await sock.sendMessage(chatId, {
+      image: {
+        url: data.image.large,
+      },
+      caption: msg.join("\n"),
+    });
   });
 };
 
 export const animeStaffDetails = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  id: string
+  id: string,
+  chatId: string
 ) => {
   Anilist.people.staff(Number(id)).then(async (data: any) => {
     const msg = [];
@@ -206,22 +201,20 @@ export const animeStaffDetails = (
         `*Description* : ${data.description}`,
       ]
     );
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      {
-        image: {
-          url: data.image.large,
-        },
-        caption: msg.join("\n"),
-      }
-    );
+    await sock.sendMessage(chatId, {
+      image: {
+        url: data.image.large,
+      },
+      caption: msg.join("\n"),
+    });
   });
 };
 
 export const searchCharacterDetail = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  query: string
+  query: string,
+  chatId: string
 ) => {
   Anilist.searchEntry.character(query, 1, 30).then(async (data) => {
     const sections: any = [
@@ -244,17 +237,15 @@ export const searchCharacterDetail = (
       sections,
       viewOnce: true,
     };
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      listMessage
-    );
+    await sock.sendMessage(chatId, listMessage);
   });
 };
 
 export const mangaSearch = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  query: string
+  query: string,
+  chatId: string
 ) => {
   Anilist.searchEntry.manga(query, undefined, 1, 50).then(async (data) => {
     const sections: any = [
@@ -278,17 +269,15 @@ export const mangaSearch = (
       viewOnce: true,
     };
 
-    await sock.sendMessage(
-      message?.key?.remoteJid ? message.key.remoteJid : "meh",
-      listMessage
-    );
+    await sock.sendMessage(chatId, listMessage);
   });
 };
 
 export const mangaDetailsById = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  id: string
+  id: string,
+  chatId: string
 ) => {
   let msg: any = [];
   Anilist.media.manga(Number(id)).then(async (data: any) => {
@@ -312,15 +301,12 @@ export const mangaDetailsById = (
         ]
       );
       // Send the result
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        {
-          image: {
-            url: data.coverImage.large,
-          },
-          caption: msg.join("\n"),
-        }
-      );
+      await sock.sendMessage(chatId, {
+        image: {
+          url: data.coverImage.large,
+        },
+        caption: msg.join("\n"),
+      });
       //     // Related Media
       //     const relatedAnimeList = [
       //       {
@@ -390,12 +376,9 @@ export const mangaDetailsById = (
       //       staffList
       //     );
     } else {
-      await sock.sendMessage(
-        message?.key?.remoteJid ? message.key.remoteJid : "meh",
-        {
-          text: `*Error* : ${data[0].status} ${data[0].message}`,
-        }
-      );
+      await sock.sendMessage(chatId, {
+        text: `*Error* : ${data[0].status} ${data[0].message}`,
+      });
     }
   });
 };

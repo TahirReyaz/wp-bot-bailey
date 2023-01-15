@@ -6,7 +6,8 @@ import { queryHandler } from "./queryHandler";
 export const gamesHandler = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  command: string
+  command: string,
+  chatId: string
 ) => {
   const { queryArray } = queryHandler(command);
   switch (queryArray[0]) {

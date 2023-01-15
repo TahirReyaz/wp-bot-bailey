@@ -49,7 +49,7 @@ async function connectToWhatsApp() {
     const convo = currentMessage.message?.conversation
       ? currentMessage.message?.conversation
       : currentMessage.message?.listResponseMessage?.title;
-    if (convo && convo[0] === ".") {
+    if (convo && (convo[0] === "." || convo[0] === "@")) {
       console.log({ m: currentMessage.message });
       readCommand(sock, currentMessage, convo.substring(1));
     }
