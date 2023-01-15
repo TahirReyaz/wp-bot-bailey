@@ -1,4 +1,9 @@
-import { AnyMessageContent, proto, WASocket } from "@adiwajshing/baileys";
+import {
+  AnyMessageContent,
+  GroupMetadata,
+  proto,
+  WASocket,
+} from "@adiwajshing/baileys";
 
 export const sendList = async (
   sock: WASocket,
@@ -17,4 +22,27 @@ export const sendList = async (
     chatId = message.key.participant ? message.key.participant : "meh";
   }
   await sock.sendMessage(chatId, list);
+};
+
+export const getMemberData = async (
+  sock: WASocket,
+  message: proto.IWebMessageInfo,
+  chatId: string
+) => {
+  let isAdmin: boolean = false,
+    metadata: GroupMetadata | undefined,
+    members: string[] = [];
+  try {
+    metadata = await sock.groupMetadata(chatId);
+
+    metadata.participants.forEach((member) => {
+      members.push(member.id);
+      if (!isAdmin && member.id === message.key.participant && member.admin) {
+        isAdmin = true;
+      }
+    });
+  } catch (metaDataErr) {
+    console.error({ metaDataErr });
+  }
+  return { members, isAdmin, metadata };
 };

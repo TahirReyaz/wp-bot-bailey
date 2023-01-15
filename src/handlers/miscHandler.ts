@@ -1,4 +1,5 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
+import { getMemberData } from "../helpers/baileyHelpers";
 
 import { queryHandler } from "./queryHandler";
 
@@ -24,8 +25,7 @@ export const miscHandler = async (
     case "all":
     case "every":
     case "everyone":
-      let annoyPerm = false,
-        isAdmin = false;
+      let annoyPerm = false;
 
       // Check if the group allows annoying mentions or not
       //   message.chat.groupMetadata.participants.forEach((participant) => {
@@ -60,47 +60,30 @@ export const miscHandler = async (
         //     console.error("Error when sending kanji definition: ", erro);
         //   });
       } else {
+        const { members, isAdmin } = await getMemberData(sock, message, chatId);
+
+        const composeMsg = [
+          "```Tagging all ",
+          members.length,
+          " members on request of``` *",
+          message.pushName,
+          "*\n",
+          "\n\n@Everyone",
+        ];
+
         try {
-          const metadata = await sock.groupMetadata(chatId);
-
-          let members: string[] = [];
-          metadata.participants.forEach((member) => {
-            members.push(member.id);
-            if (
-              !isAdmin &&
-              member.id === message.key.participant &&
-              member.isAdmin
-            ) {
-              console.log({ member });
-              isAdmin = true;
-            }
-          });
-
-          const composeMsg = [
-            "```Tagging all ",
-            members.length,
-            " members on request of``` *",
-            message.pushName,
-            "*\n",
-            "\n\n@Everyone",
-          ];
-
-          try {
-            if (isAdmin || message.key.fromMe) {
-              await sock.sendMessage(
-                chatId,
-                {
-                  text: composeMsg.join(""),
-                  mentions: members,
-                },
-                { quoted: message }
-              );
-            }
-          } catch (sendMentionedErr) {
-            console.error({ sendMentionedErr });
+          if (isAdmin || message.key.fromMe) {
+            await sock.sendMessage(
+              chatId,
+              {
+                text: composeMsg.join(""),
+                mentions: members,
+              },
+              { quoted: message }
+            );
           }
-        } catch (metadataErr) {
-          console.error({ metadataErr });
+        } catch (sendMentionedErr) {
+          console.error({ sendMentionedErr });
         }
       }
       break;

@@ -3,7 +3,7 @@ import { proto, WASocket } from "@adiwajshing/baileys";
 import { truthOrDare, wouldYouRather } from "../helpers/gameHelpers";
 import { queryHandler } from "./queryHandler";
 
-export const gamesHandler = async (
+export const gamesHandler = (
   sock: WASocket,
   command: string,
   chatId: string

@@ -5,6 +5,7 @@ import { gamesHandler } from "./gamesHandler";
 import { infoHandler } from "./infoHandler";
 import { menuHandler } from "./menuHandler";
 import { miscHandler } from "./miscHandler";
+import { rolesHandler } from "./rolesHandler";
 
 export const readCommand = async (
   sock: WASocket,
@@ -18,4 +19,5 @@ export const readCommand = async (
   menuHandler(sock, command, chatId);
   entHandler(sock, command, chatId);
   miscHandler(sock, message, command, chatId);
+  rolesHandler(sock, message, command, chatId);
 };
