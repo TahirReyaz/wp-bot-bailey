@@ -1,4 +1,4 @@
-import { proto, WASocket } from "@adiwajshing/baileys";
+import { WASocket } from "@adiwajshing/baileys";
 import axios from "axios";
 import musicInfo from "music-info";
 import _ from "lodash";

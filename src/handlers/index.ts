@@ -10,7 +10,10 @@ import { rolesHandler } from "./rolesHandler";
 export const readCommand = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  command: string
+  command: string,
+  tagAllGrps: string[] = [],
+  tagAllAdminOnlyGrps: string[] = [],
+  roastGrps: string[] = []
 ) => {
   const chatId: string = message?.key?.remoteJid || "meh";
   infoHandler(sock, message, command, chatId);
@@ -19,5 +22,13 @@ export const readCommand = async (
   menuHandler(sock, command, chatId);
   entHandler(sock, command, chatId);
   miscHandler(sock, message, command, chatId);
-  rolesHandler(sock, message, command, chatId);
+  rolesHandler(
+    sock,
+    message,
+    command,
+    chatId,
+    tagAllGrps,
+    tagAllAdminOnlyGrps,
+    roastGrps
+  );
 };

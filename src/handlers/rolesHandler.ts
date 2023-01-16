@@ -12,7 +12,10 @@ export const rolesHandler = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   command: string,
-  chatId: string
+  chatId: string,
+  tagAllGrps: string[] = [],
+  tagAllAdminOnlyGrps: string[] = [],
+  roastGrps: string[] = []
 ) => {
   const { queryArray, query } = queryHandler(command);
 
@@ -23,15 +26,38 @@ export const rolesHandler = (
       break;
     ////////////////////////////////ADD GRP PERMISSION/////////////////////////////////
     case "agp":
-      addGroupPermission(sock, message, query, chatId);
+      addGroupPermission(
+        sock,
+        message,
+        query,
+        chatId,
+        tagAllGrps,
+        tagAllAdminOnlyGrps,
+        roastGrps
+      );
       break;
     ///////////////////////////////REMOVE GRP PERMISSION/////////////////////////////////
     case "rgr":
-      removeGroupPermission(sock, message, query, chatId);
+      removeGroupPermission(
+        sock,
+        message,
+        query,
+        chatId,
+        tagAllGrps,
+        tagAllAdminOnlyGrps,
+        roastGrps
+      );
       break;
     ///////////////////////////////SHOW GRP PERMISSIONS/////////////////////////////////
     case "sgr":
-      showGroupPermissions(sock, message, chatId);
+      showGroupPermissions(
+        sock,
+        message,
+        chatId,
+        tagAllGrps,
+        tagAllAdminOnlyGrps,
+        roastGrps
+      );
       break;
     //////////////////////////////////ADD ROLE/////////////////////////////////
     case "ar":

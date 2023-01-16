@@ -1,20 +1,21 @@
+import axios from "axios";
 import { proto, WASocket } from "@adiwajshing/baileys";
 
 import { getMemberData } from "./baileyHelpers";
 
 const grpPermissions = [
   {
-    title: ".agp mention-all",
+    title: ".agp tagAll",
     description:
       "To enable this group for letting all members mention everyone like discord",
   },
   {
-    title: ".agp mention-all-admin-only",
+    title: ".agp tagAllAdminOnly",
     description:
       "To enable this group for letting only admins mention everyone",
   },
   {
-    title: ".agp nsfw-roast",
+    title: ".agp roast",
     description:
       "To enable this group for letting all members use roast command which may be nsfw",
   },
@@ -63,72 +64,79 @@ export const addGroupPermission = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   query: string,
-  chatId: string
+  chatId: string,
+  tagAllGrps: string[] = [],
+  tagAllAdminOnlyGrps: string[] = [],
+  roastGrps: string[] = []
 ) => {
   const { isAdmin } = await getMemberData(sock, message, chatId);
-  let grpArray: any[] = [];
+  let grpArray: any[] = [],
+    grpPresentAlready: boolean = false;
 
   if (isAdmin || message.key.fromMe) {
-    // switch (query) {
-    //   case "mention-all":
-    //     grpArray = mentionAllGrps;
-    //     break;
-    //   case "mention-all-admin-only":
-    //     grpArray = mentionAllAdminOnlyGrps;
-    //     break;
-    //   case "nsfw-roast":
-    //     grpArray = nsfwRoastGrps;
-    //     break;
-    // }
-    // let grpPresentAlready = false;
-    // grpArray.forEach((grp) => {
-    //   if (grp.grpId === message.chatId) {
-    //     grpPresentAlready = true;
-    //   }
-    // });
-    // // If group already has the selected role
-    // if (grpPresentAlready) {
-    //   sendReply(
-    //     message.chatId,
-    //     `This group is already a ${query} group`,
-    //     message.id.toString(),
-    //     "Error when sending warning: "
-    //   );
-    // } else {
-    //   axios
-    //     .post(`${process.env.FIREBASE_DOMAIN}/grpFlags/${query}.json`, {
-    //       grpId: message.chatId,
-    //     })
-    //     .then((res) => {
-    //       console.log("in then");
-    //       grpArray.push({
-    //         id: res.data.name,
-    //         grpId: message.chatId,
-    //       });
-    //       switch (query) {
-    //         case "mention-all":
-    //           mentionAllGrps = grpArray;
-    //           console.log(mentionAllGrps);
-    //           break;
-    //         case "mention-all-admin-only":
-    //           mentionAllAdminOnlyGrps = grpArray;
-    //           console.log(mentionAllGrps);
-    //           break;
-    //         case "nsfw-roast":
-    //           nsfwRoastGrps = grpArray;
-    //           console.log(mentionAllGrps);
-    //           break;
-    //       }
-    //       sendReply(
-    //         message.chatId,
-    //         `Added ${query} permission to this group`,
-    //         message.id.toString(),
-    //         "Error when sending warning: "
-    //       );
-    //       console.log(res.data);
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
+    switch (query) {
+      case "tagAll":
+        grpArray = tagAllGrps;
+        break;
+      case "tagAllAdminOnly":
+        grpArray = tagAllAdminOnlyGrps;
+        break;
+      case "roast":
+        grpArray = roastGrps;
+        break;
+    }
+    grpArray.forEach((grp) => {
+      if (grp === chatId) {
+        grpPresentAlready = true;
+      }
+    });
+    if (!grpPresentAlready) {
+      try {
+        await axios.post(
+          `${process.env.FIREBASE_DOMAIN}/grpData/grpPermissions/${query}.json`,
+          {
+            grpId: chatId,
+          }
+        );
+        grpArray.push(chatId);
+        switch (query) {
+          case "tagAll":
+            tagAllGrps = grpArray;
+            break;
+          case "tagAllAdminOnly":
+            tagAllAdminOnlyGrps = grpArray;
+            break;
+          case "roast":
+            roastGrps = grpArray;
+            break;
+        }
+        try {
+          await sock.sendMessage(
+            chatId,
+            {
+              text: `Added ${query} permission to this group`,
+            },
+            { quoted: message }
+          );
+        } catch (warningErr) {
+          console.error("Error when sending warning: ", warningErr);
+        }
+      } catch (addGrpErr) {
+        console.log({ addGrpErr });
+      }
+    } else {
+      try {
+        await sock.sendMessage(
+          chatId,
+          {
+            text: `This group is already has ${query} permission`,
+          },
+          { quoted: message }
+        );
+      } catch (warningErr) {
+        console.error("Error when sending warning: ", warningErr);
+      }
+    }
   } else {
     try {
       await sock.sendMessage(
@@ -147,14 +155,20 @@ export const addGroupPermission = async (
 export const showGroupPermissions = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  chatId: string
+  chatId: string,
+  tagAllGrps: string[] = [],
+  tagAllAdminOnlyGrps: string[] = [],
+  roastGrps: string[] = []
 ) => {};
 
 export const removeGroupPermission = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   query: string,
-  chatId: string
+  chatId: string,
+  tagAllGrps: string[] = [],
+  tagAllAdminOnlyGrps: string[] = [],
+  roastGrps: string[] = []
 ) => {
   // console.log("in del groles");
   // // Check whether the sender is an admin
@@ -177,14 +191,14 @@ export const removeGroupPermission = async (
   // // Select the group to work on
   // console.log(query);
   // switch (query) {
-  //   case "mention-all":
-  //     grpArray = mentionAllGrps;
+  //   case "tagAll":
+  //     grpArray = tagAllGrps;
   //     break;
-  //   case "mention-all-admin-only":
-  //     grpArray = mentionAllAdminOnlyGrps;
+  //   case "tagAllAdminOnly":
+  //     grpArray = tagAllAdminOnlyGrps;
   //     break;
-  //   case "nsfw-roast":
-  //     grpArray = nsfwRoastGrps;
+  //   case "roast":
+  //     grpArray = roastGrps;
   //     break;
   // }
   // let grpAbsent = true;
@@ -220,15 +234,15 @@ export const removeGroupPermission = async (
   //       });
   //       console.log("grp array", updatedGrpArr);
   //       switch (query) {
-  //         case "mention-all":
-  //           mentionAllGrps = updatedGrpArr;
-  //           console.log("all grps", mentionAllGrps);
+  //         case "tagAll":
+  //           tagAllGrps = updatedGrpArr;
+  //           console.log("all grps", tagAllGrps);
   //           break;
-  //         case "mention-all-admin-only":
-  //           mentionAllAdminOnlyGrps = updatedGrpArr;
+  //         case "tagAllAdminOnly":
+  //           tagAllAdminOnlyGrps = updatedGrpArr;
   //           break;
-  //         case "nsfw-roast":
-  //           nsfwRoastGrps = updatedGrpArr;
+  //         case "roast":
+  //           roastGrps = updatedGrpArr;
   //           break;
   //       }
   //       sendReply(

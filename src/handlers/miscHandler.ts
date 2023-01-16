@@ -26,6 +26,7 @@ export const miscHandler = async (
     case "every":
     case "everyone":
       let annoyPerm = false;
+      const { members, isAdmin } = await getMemberData(sock, message, chatId);
 
       // Check if the group allows annoying mentions or not
       //   message.chat.groupMetadata.participants.forEach((participant) => {
@@ -60,8 +61,6 @@ export const miscHandler = async (
         //     console.error("Error when sending kanji definition: ", erro);
         //   });
       } else {
-        const { members, isAdmin } = await getMemberData(sock, message, chatId);
-
         const composeMsg = [
           "```Tagging all ",
           members.length,
