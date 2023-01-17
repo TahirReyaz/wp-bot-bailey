@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { proto, WASocket } from "@adiwajshing/baileys";
 
 import { getMemberData } from "./baileyHelpers";
+import { grpArrayItem } from "./fetchData";
 
 const grpPermissions = [
   {
@@ -65,12 +66,12 @@ export const addGroupPermission = async (
   message: proto.IWebMessageInfo,
   query: string,
   chatId: string,
-  tagAllGrps: string[] = [],
-  tagAllAdminOnlyGrps: string[] = [],
-  roastGrps: string[] = []
+  tagAllGrps: grpArrayItem[],
+  tagAllAdminOnlyGrps: grpArrayItem[],
+  roastGrps: grpArrayItem[]
 ) => {
   const { isAdmin } = await getMemberData(sock, message, chatId);
-  let grpArray: any[] = [],
+  let grpArray: grpArrayItem[] = [],
     grpPresentAlready: boolean = false;
 
   if (isAdmin || message.key.fromMe) {
@@ -85,20 +86,20 @@ export const addGroupPermission = async (
         grpArray = roastGrps;
         break;
     }
-    grpArray.forEach((grp) => {
-      if (grp === chatId) {
+    grpArray.forEach(({ grpId }) => {
+      if (grpId === chatId) {
         grpPresentAlready = true;
       }
     });
     if (!grpPresentAlready) {
       try {
-        await axios.post(
+        const { data }: AxiosResponse = await axios.post(
           `${process.env.FIREBASE_DOMAIN}/grpData/grpPermissions/${query}.json`,
           {
             grpId: chatId,
           }
         );
-        grpArray.push(chatId);
+        grpArray.push({ grpId: chatId, firebaseId: data.name });
         switch (query) {
           case "tagAll":
             tagAllGrps = grpArray;
@@ -156,9 +157,9 @@ export const showGroupPermissions = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   chatId: string,
-  tagAllGrps: string[] = [],
-  tagAllAdminOnlyGrps: string[] = [],
-  roastGrps: string[] = []
+  tagAllGrps: grpArrayItem[],
+  tagAllAdminOnlyGrps: grpArrayItem[],
+  roastGrps: grpArrayItem[]
 ) => {};
 
 export const removeGroupPermission = async (
@@ -166,102 +167,103 @@ export const removeGroupPermission = async (
   message: proto.IWebMessageInfo,
   query: string,
   chatId: string,
-  tagAllGrps: string[] = [],
-  tagAllAdminOnlyGrps: string[] = [],
-  roastGrps: string[] = []
+  tagAllGrps: grpArrayItem[],
+  tagAllAdminOnlyGrps: grpArrayItem[],
+  roastGrps: grpArrayItem[]
 ) => {
-  // console.log("in del groles");
-  // // Check whether the sender is an admin
-  // perm = false;
-  // message.chat.groupMetadata.participants.forEach((participant) => {
-  //   if (participant.isAdmin && participant.id === message.sender.id) {
-  //     perm = true;
-  //   }
-  // });
-  // // If sender is not an admin then send warning
-  // if (!perm && !message.fromMe) {
-  //   sendReply(
-  //     message.chatId,
-  //     "This command is used for deleting a group role.\n\nThis commands is only for admins",
-  //     message.id.toString(),
-  //     "Error when sending warning: "
-  //   );
-  //   break;
-  // }
-  // // Select the group to work on
-  // console.log(query);
-  // switch (query) {
-  //   case "tagAll":
-  //     grpArray = tagAllGrps;
-  //     break;
-  //   case "tagAllAdminOnly":
-  //     grpArray = tagAllAdminOnlyGrps;
-  //     break;
-  //   case "roast":
-  //     grpArray = roastGrps;
-  //     break;
-  // }
-  // let grpAbsent = true;
-  // grpArray.forEach((grp) => {
-  //   if (grp.grpId === message.chatId) {
-  //     grpAbsent = false;
-  //   }
-  // });
-  // // If group doesnt have the selected role
-  // if (grpAbsent) {
-  //   sendReply(
-  //     message.chatId,
-  //     `This group is not a ${query} group`,
-  //     message.id.toString(),
-  //     "Error when sending warning: "
-  //   );
-  //   break;
-  // } else {
-  //   selectedGrp = grpArray.find((grp) => grp.grpId === message.chatId);
-  //   console.log(grpArray);
-  //   console.log("selectedgrp:", selectedGrp.id);
-  //   axios
-  //     .delete(
-  //       `${process.env.FIREBASE_DOMAIN}/grpFlags/${query}/${selectedGrp.id}.json`
-  //     )
-  //     .then((res) => {
-  //       let updatedGrpArr = grpArray.filter((grp) => {
-  //         console.log(
-  //           message.chatId !== grp.grpId,
-  //           message.chatId != grp.grpId
-  //         );
-  //         return message.chatId !== grp.grpId;
-  //       });
-  //       console.log("grp array", updatedGrpArr);
-  //       switch (query) {
-  //         case "tagAll":
-  //           tagAllGrps = updatedGrpArr;
-  //           console.log("all grps", tagAllGrps);
-  //           break;
-  //         case "tagAllAdminOnly":
-  //           tagAllAdminOnlyGrps = updatedGrpArr;
-  //           break;
-  //         case "roast":
-  //           roastGrps = updatedGrpArr;
-  //           break;
-  //       }
-  //       sendReply(
-  //         message.chatId,
-  //         `Removed ${query} permission from this group`,
-  //         message.id.toString(),
-  //         "Error when sending warning: "
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       sendReply(
-  //         message.chatId,
-  //         "An error occurred\nCheck spellings and syntax",
-  //         message.id.toString(),
-  //         "Error when sending error: "
-  //       );
-  //       console.log(err.data);
-  //     });
-  // }
+  const { isAdmin } = await getMemberData(sock, message, chatId);
+  let grpArray: grpArrayItem[] = [],
+    grpAbsent: boolean = true,
+    selectedGrp: grpArrayItem = { grpId: "", firebaseId: "" };
+
+  if (isAdmin || message.key.fromMe) {
+    switch (query) {
+      case "tagAll":
+        grpArray = tagAllGrps;
+        break;
+      case "tagAllAdminOnly":
+        grpArray = tagAllAdminOnlyGrps;
+        break;
+      case "roast":
+        grpArray = roastGrps;
+        break;
+    }
+    grpArray.forEach((grp) => {
+      if (grp.grpId === chatId) {
+        grpAbsent = false;
+        selectedGrp = grp;
+      }
+    });
+    // If group doesnt have the selected role
+    if (!grpAbsent) {
+      try {
+        await axios.delete(
+          `${process.env.FIREBASE_DOMAIN}/grpData/grpPermissions/${query}/${selectedGrp.firebaseId}.json`
+        );
+        let updatedGrpArr = grpArray.filter((grp) => chatId !== grp.grpId);
+        switch (query) {
+          case "tagAll":
+            tagAllGrps = updatedGrpArr;
+            break;
+          case "tagAllAdminOnly":
+            tagAllAdminOnlyGrps = updatedGrpArr;
+            break;
+          case "roast":
+            roastGrps = updatedGrpArr;
+            break;
+        }
+        try {
+          await sock.sendMessage(
+            chatId,
+            {
+              text: `Removed ${query} permission from this group`,
+            },
+            { quoted: message }
+          );
+        } catch (warningErr) {
+          console.error("Error when sending warning: ", warningErr);
+        }
+      } catch (delGrpErr) {
+        try {
+          await sock.sendMessage(
+            chatId,
+            {
+              text: "An error occurred\nCheck spellings and syntax",
+            },
+            { quoted: message }
+          );
+        } catch (warningErr) {
+          console.error("Error when sending warning: ", warningErr);
+        }
+
+        console.log({ delGrpErr });
+      }
+    } else {
+      try {
+        await sock.sendMessage(
+          chatId,
+          {
+            text: `This group doesn't have ${query} permission`,
+          },
+          { quoted: message }
+        );
+      } catch (warningErr) {
+        console.error("Error when sending warning: ", warningErr);
+      }
+    }
+  } else {
+    try {
+      await sock.sendMessage(
+        chatId,
+        {
+          text: "This command is used for deleting a group roles.\n\nIts available only for admins",
+        },
+        { quoted: message }
+      );
+    } catch (warningErr) {
+      console.error("Error when sending warning: ", warningErr);
+    }
+  }
 };
 
 export const showAllRoles = () => {

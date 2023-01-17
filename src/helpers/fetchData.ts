@@ -2,23 +2,38 @@ import axios, { AxiosResponse } from "axios";
 import { config } from "dotenv";
 config();
 
+export interface grpArrayItem {
+  grpId: string;
+  firebaseId: string;
+}
+
 export const fetchData = async () => {
-  let tagAllGrps: string[] = [],
-    tagAllAdminOnlyGrps: string[] = [],
-    roastGrps: string[] = [];
+  let tagAllGrps: grpArrayItem[] = [],
+    tagAllAdminOnlyGrps: grpArrayItem[] = [],
+    roastGrps: grpArrayItem[] = [];
   try {
     const { data: botData }: AxiosResponse = await axios.get(
       `${process.env.FIREBASE_DOMAIN}/grpData.json`
     );
+
     const { grpPermissions, grpRoles } = botData;
     for (const key in grpPermissions.tagAll) {
-      tagAllGrps.push(grpPermissions.tagAll[key].grpId);
+      tagAllGrps.push({
+        grpId: grpPermissions.tagAll[key].grpId,
+        firebaseId: key,
+      });
     }
     for (const key in grpPermissions.tagAllAdminOnly) {
-      tagAllAdminOnlyGrps.push(grpPermissions.tagAllAdminOnly[key].grpId);
+      tagAllAdminOnlyGrps.push({
+        grpId: grpPermissions.tagAllAdminOnly[key].grpId,
+        firebaseId: key,
+      });
     }
     for (const key in grpPermissions.roast) {
-      roastGrps.push(grpPermissions.roast[key].grpId);
+      roastGrps.push({
+        grpId: grpPermissions.roast[key].grpId,
+        firebaseId: key,
+      });
     }
   } catch (err) {
     console.log({ err });

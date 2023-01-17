@@ -1,4 +1,5 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
+import { grpArrayItem } from "../helpers/fetchData";
 
 import {
   addGroupPermission,
@@ -13,9 +14,9 @@ export const rolesHandler = (
   message: proto.IWebMessageInfo,
   command: string,
   chatId: string,
-  tagAllGrps: string[] = [],
-  tagAllAdminOnlyGrps: string[] = [],
-  roastGrps: string[] = []
+  tagAllGrps: grpArrayItem[],
+  tagAllAdminOnlyGrps: grpArrayItem[],
+  roastGrps: grpArrayItem[]
 ) => {
   const { queryArray, query } = queryHandler(command);
 

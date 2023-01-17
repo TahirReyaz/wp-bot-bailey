@@ -7,7 +7,7 @@ import { Boom } from "@hapi/boom";
 import MAIN_LOGGER from "@adiwajshing/baileys/lib/Utils/logger";
 
 import { readCommand } from "./handlers";
-import { fetchData } from "./helpers/fetchData";
+import { fetchData, grpArrayItem } from "./helpers/fetchData";
 
 const logger = MAIN_LOGGER.child({});
 logger.level = "trace";
@@ -23,9 +23,9 @@ async function connectToWhatsApp() {
     },
   });
 
-  let tagAllGrps: string[] = [],
-    tagAllAdminOnlyGrps: string[] = [],
-    roastGrps: string[] = [];
+  let tagAllGrps: grpArrayItem[] = [],
+    tagAllAdminOnlyGrps: grpArrayItem[] = [],
+    roastGrps: grpArrayItem[] = [];
 
   sock.ev.on("creds.update", saveCreds);
   sock.ev.on("connection.update", async (update) => {
