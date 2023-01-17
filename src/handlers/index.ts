@@ -1,5 +1,4 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
-import { grpArrayItem } from "../helpers/fetchData";
 import { animeHanlder } from "./animeHandler";
 import { entHandler } from "./entHandler";
 import { gamesHandler } from "./gamesHandler";
@@ -11,10 +10,7 @@ import { rolesHandler } from "./rolesHandler";
 export const readCommand = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  command: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
+  command: string
 ) => {
   const chatId: string = message?.key?.remoteJid || "meh";
   infoHandler(sock, message, command, chatId);
@@ -22,22 +18,6 @@ export const readCommand = async (
   gamesHandler(sock, command, chatId);
   menuHandler(sock, command, chatId);
   entHandler(sock, command, chatId);
-  miscHandler(
-    sock,
-    message,
-    command,
-    chatId,
-    tagAllGrps,
-    tagAllAdminOnlyGrps,
-    roastGrps
-  );
-  rolesHandler(
-    sock,
-    message,
-    command,
-    chatId,
-    tagAllGrps,
-    tagAllAdminOnlyGrps,
-    roastGrps
-  );
+  miscHandler(sock, message, command, chatId);
+  rolesHandler(sock, message, command, chatId);
 };

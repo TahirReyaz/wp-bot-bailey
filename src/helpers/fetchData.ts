@@ -2,21 +2,19 @@ import axios, { AxiosResponse } from "axios";
 import { config } from "dotenv";
 config();
 
-export interface grpArrayItem {
-  grpId: string;
-  firebaseId: string;
-}
+import { grpArrayItem, updateGrpPermissions } from "../../data/grpData";
 
 export const fetchData = async () => {
-  let tagAllGrps: grpArrayItem[] = [],
-    tagAllAdminOnlyGrps: grpArrayItem[] = [],
-    roastGrps: grpArrayItem[] = [];
   try {
     const { data: botData }: AxiosResponse = await axios.get(
       `${process.env.FIREBASE_DOMAIN}/grpData.json`
     );
 
     const { grpPermissions, grpRoles } = botData;
+    const tagAllGrps: grpArrayItem[] = [],
+      tagAllAdminOnlyGrps: grpArrayItem[] = [],
+      roastGrps: grpArrayItem[] = [];
+
     if (grpPermissions?.tagAll) {
       for (const key in grpPermissions.tagAll) {
         tagAllGrps.push({
@@ -24,6 +22,7 @@ export const fetchData = async () => {
           firebaseId: key,
         });
       }
+      updateGrpPermissions("tagAll", tagAllGrps);
     }
     if (grpPermissions?.tagAllAdminOnly) {
       for (const key in grpPermissions.tagAllAdminOnly) {
@@ -32,6 +31,7 @@ export const fetchData = async () => {
           firebaseId: key,
         });
       }
+      updateGrpPermissions("tagAllAdminOnly", tagAllAdminOnlyGrps);
     }
     if (grpPermissions?.roast) {
       for (const key in grpPermissions.roast) {
@@ -40,9 +40,9 @@ export const fetchData = async () => {
           firebaseId: key,
         });
       }
+      updateGrpPermissions("roast", roastGrps);
     }
   } catch (err) {
     console.log({ err });
   }
-  return { tagAllGrps, tagAllAdminOnlyGrps, roastGrps };
 };

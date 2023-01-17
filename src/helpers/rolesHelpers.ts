@@ -2,21 +2,27 @@ import axios, { AxiosResponse } from "axios";
 import { proto, WASocket } from "@adiwajshing/baileys";
 
 import { getMemberData } from "./baileyHelpers";
-import { grpArrayItem } from "./fetchData";
+import {
+  grpArrayItem,
+  grpData,
+  GrpPermissions,
+  updateGrpPermissions,
+} from "../../data/grpData";
 
 export const groupPerms = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
+  chatId: string
 ) => {
-  const tagAll: boolean = tagAllGrps.some(({ grpId }) => grpId === chatId),
-    tagAllAdminOnly: boolean = tagAllAdminOnlyGrps.some(
+  const tagAll: boolean = grpData.grpPermissions.tagAll.some(
       ({ grpId }) => grpId === chatId
     ),
-    roast: boolean = roastGrps.some(({ grpId }) => grpId === chatId);
+    tagAllAdminOnly: boolean = grpData.grpPermissions.tagAllAdminOnly.some(
+      ({ grpId }) => grpId === chatId
+    ),
+    roast: boolean = grpData.grpPermissions.roast.some(
+      ({ grpId }) => grpId === chatId
+    );
 
   const { isAdmin } = await getMemberData(sock, message, chatId);
   if (isAdmin || message.key.fromMe) {
@@ -77,32 +83,16 @@ export const addGroupPermission = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   query: string,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
+  chatId: string
 ) => {
   const { isAdmin } = await getMemberData(sock, message, chatId);
   let grpArray: grpArrayItem[] = [],
     grpPresentAlready: boolean = false;
 
   if (isAdmin || message.key.fromMe) {
-    switch (query) {
-      case "tagAll":
-        grpArray = tagAllGrps;
-        break;
-      case "tagAllAdminOnly":
-        grpArray = tagAllAdminOnlyGrps;
-        break;
-      case "roast":
-        grpArray = roastGrps;
-        break;
-    }
-    grpArray.forEach(({ grpId }) => {
-      if (grpId === chatId) {
-        grpPresentAlready = true;
-      }
-    });
+    grpArray = grpData.grpPermissions[query as keyof GrpPermissions];
+    grpPresentAlready = grpArray.some(({ grpId }) => grpId === chatId);
+
     if (!grpPresentAlready) {
       try {
         const { data }: AxiosResponse = await axios.post(
@@ -112,17 +102,8 @@ export const addGroupPermission = async (
           }
         );
         grpArray.push({ grpId: chatId, firebaseId: data.name });
-        switch (query) {
-          case "tagAll":
-            tagAllGrps = grpArray;
-            break;
-          case "tagAllAdminOnly":
-            tagAllAdminOnlyGrps = grpArray;
-            break;
-          case "roast":
-            roastGrps = grpArray;
-            break;
-        }
+        updateGrpPermissions(query, grpArray);
+
         try {
           await sock.sendMessage(
             chatId,
@@ -169,10 +150,7 @@ export const removeGroupPermission = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   query: string,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
+  chatId: string
 ) => {
   const { isAdmin } = await getMemberData(sock, message, chatId);
   let grpArray: grpArrayItem[] = [],
@@ -180,23 +158,15 @@ export const removeGroupPermission = async (
     selectedGrp: grpArrayItem = { grpId: "", firebaseId: "" };
 
   if (isAdmin || message.key.fromMe) {
-    switch (query) {
-      case "tagAll":
-        grpArray = tagAllGrps;
-        break;
-      case "tagAllAdminOnly":
-        grpArray = tagAllAdminOnlyGrps;
-        break;
-      case "roast":
-        grpArray = roastGrps;
-        break;
-    }
+    grpArray = grpData.grpPermissions[query as keyof GrpPermissions];
+
     grpArray.forEach((grp) => {
       if (grp.grpId === chatId) {
         grpAbsent = false;
         selectedGrp = grp;
       }
     });
+
     // If group doesnt have the selected role
     if (!grpAbsent) {
       try {
@@ -204,17 +174,7 @@ export const removeGroupPermission = async (
           `${process.env.FIREBASE_DOMAIN}/grpData/grpPermissions/${query}/${selectedGrp.firebaseId}.json`
         );
         let updatedGrpArr = grpArray.filter((grp) => chatId !== grp.grpId);
-        switch (query) {
-          case "tagAll":
-            tagAllGrps = updatedGrpArr;
-            break;
-          case "tagAllAdminOnly":
-            tagAllAdminOnlyGrps = updatedGrpArr;
-            break;
-          case "roast":
-            roastGrps = updatedGrpArr;
-            break;
-        }
+        updateGrpPermissions(query, updatedGrpArr);
         try {
           await sock.sendMessage(
             chatId,

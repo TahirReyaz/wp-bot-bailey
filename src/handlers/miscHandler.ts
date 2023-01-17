@@ -1,18 +1,13 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
-import { getMemberData } from "../helpers/baileyHelpers";
-import { grpArrayItem } from "../helpers/fetchData";
-import { sendRoast, sendTagAll } from "../helpers/miscHelpers";
 
+import { sendRoast, sendTagAll } from "../helpers/miscHelpers";
 import { queryHandler } from "./queryHandler";
 
 export const miscHandler = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   command: string,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
+  chatId: string
 ) => {
   const { query, queryArray } = queryHandler(command);
   switch (queryArray[0]) {
@@ -29,11 +24,11 @@ export const miscHandler = async (
     case "y'all":
     case "all":
     case "everyone":
-      sendTagAll(sock, message, chatId, tagAllGrps, tagAllAdminOnlyGrps);
+      sendTagAll(sock, message, chatId);
       break;
     //////////////////////////////////////ROAST///////////////////////////////////////
     case "roast":
-      sendRoast(sock, message, query, chatId, roastGrps);
+      sendRoast(sock, message, query, chatId);
       break;
   }
 };

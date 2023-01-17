@@ -1,5 +1,4 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
-import { grpArrayItem } from "../helpers/fetchData";
 
 import {
   addGroupPermission,
@@ -12,48 +11,22 @@ export const rolesHandler = (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   command: string,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
+  chatId: string
 ) => {
   const { queryArray, query } = queryHandler(command);
 
   switch (queryArray[0]) {
     ////////////////////////////////////GRP ROLES/////////////////////////////////
     case "gperms":
-      groupPerms(
-        sock,
-        message,
-        chatId,
-        tagAllGrps,
-        tagAllAdminOnlyGrps,
-        roastGrps
-      );
+      groupPerms(sock, message, chatId);
       break;
     ////////////////////////////////ADD GRP PERMISSION/////////////////////////////////
     case "agp":
-      addGroupPermission(
-        sock,
-        message,
-        query,
-        chatId,
-        tagAllGrps,
-        tagAllAdminOnlyGrps,
-        roastGrps
-      );
+      addGroupPermission(sock, message, query, chatId);
       break;
     ///////////////////////////////REMOVE GRP PERMISSION/////////////////////////////////
     case "rgp":
-      removeGroupPermission(
-        sock,
-        message,
-        query,
-        chatId,
-        tagAllGrps,
-        tagAllAdminOnlyGrps,
-        roastGrps
-      );
+      removeGroupPermission(sock, message, query, chatId);
       break;
     //////////////////////////////////ADD ROLE/////////////////////////////////
     case "ar":

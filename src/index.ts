@@ -7,7 +7,7 @@ import { Boom } from "@hapi/boom";
 import MAIN_LOGGER from "@adiwajshing/baileys/lib/Utils/logger";
 
 import { readCommand } from "./handlers";
-import { fetchData, grpArrayItem } from "./helpers/fetchData";
+import { fetchData } from "./helpers/fetchData";
 
 const logger = MAIN_LOGGER.child({});
 logger.level = "trace";
@@ -22,10 +22,6 @@ async function connectToWhatsApp() {
       keys: makeCacheableSignalKeyStore(state.keys, logger),
     },
   });
-
-  let tagAllGrps: grpArrayItem[] = [],
-    tagAllAdminOnlyGrps: grpArrayItem[] = [],
-    roastGrps: grpArrayItem[] = [];
 
   sock.ev.on("creds.update", saveCreds);
   sock.ev.on("connection.update", async (update) => {
@@ -46,14 +42,7 @@ async function connectToWhatsApp() {
       }
     } else if (connection === "open") {
       console.log("opened connection");
-      const {
-        tagAllGrps: tagrps,
-        tagAllAdminOnlyGrps: taaogps,
-        roastGrps: rgrps,
-      } = await fetchData();
-      tagAllGrps = tagrps;
-      tagAllAdminOnlyGrps = taaogps;
-      roastGrps = rgrps;
+      fetchData();
     }
   });
 
@@ -64,14 +53,7 @@ async function connectToWhatsApp() {
       : currentMessage.message?.listResponseMessage?.title;
     if (convo && (convo[0] === "." || convo[0] === "@")) {
       console.log({ m: currentMessage.message });
-      readCommand(
-        sock,
-        currentMessage,
-        convo.substring(1),
-        tagAllGrps,
-        tagAllAdminOnlyGrps,
-        roastGrps
-      );
+      readCommand(sock, currentMessage, convo.substring(1));
     }
   });
 }

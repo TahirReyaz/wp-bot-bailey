@@ -1,15 +1,13 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 import axios, { AxiosResponse } from "axios";
-import { getMemberData } from "./baileyHelpers";
 
-import { grpArrayItem } from "./fetchData";
+import { grpData } from "../../data/grpData";
+import { getMemberData } from "./baileyHelpers";
 
 export const sendTagAll = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[]
+  chatId: string
 ) => {
   if (!message.key.participant) {
     try {
@@ -30,8 +28,10 @@ export const sendTagAll = async (
   const { members, isAdmin } = await getMemberData(sock, message, chatId);
 
   // Check if the group allows annoying mentions or not
-  const tagAll: boolean = tagAllGrps.some(({ grpId }) => grpId === chatId),
-    tagAllAdminOnly: boolean = tagAllAdminOnlyGrps.some(
+  const tagAll: boolean = grpData.grpPermissions.tagAll.some(
+      ({ grpId }) => grpId === chatId
+    ),
+    tagAllAdminOnly: boolean = grpData.grpPermissions.tagAllAdminOnly.some(
       ({ grpId }) => grpId === chatId
     );
 
@@ -83,12 +83,13 @@ export const sendRoast = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
   query: string,
-  chatId: string,
-  roastGrps: grpArrayItem[]
+  chatId: string
 ) => {
   let composeMsg: string[];
   // Check if the group allows nsfw roats or not
-  const roastPerm: boolean = roastGrps.some(({ grpId }) => grpId === chatId);
+  const roastPerm: boolean = grpData.grpPermissions.roast.some(
+    ({ grpId }) => grpId === chatId
+  );
 
   if (roastPerm) {
     try {
