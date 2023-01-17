@@ -4,31 +4,43 @@ import { proto, WASocket } from "@adiwajshing/baileys";
 import { getMemberData } from "./baileyHelpers";
 import { grpArrayItem } from "./fetchData";
 
-const grpPermissions = [
-  {
-    title: ".agp tagAll",
-    description:
-      "To enable this group for letting all members mention everyone like discord",
-  },
-  {
-    title: ".agp tagAllAdminOnly",
-    description:
-      "To enable this group for letting only admins mention everyone",
-  },
-  {
-    title: ".agp roast",
-    description:
-      "To enable this group for letting all members use roast command which may be nsfw",
-  },
-];
-
 export const groupPerms = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  chatId: string
+  chatId: string,
+  tagAllGrps: grpArrayItem[],
+  tagAllAdminOnlyGrps: grpArrayItem[],
+  roastGrps: grpArrayItem[]
 ) => {
+  const tagAll: boolean = tagAllGrps.some(({ grpId }) => grpId === chatId),
+    tagAllAdminOnly: boolean = tagAllAdminOnlyGrps.some(
+      ({ grpId }) => grpId === chatId
+    ),
+    roast: boolean = roastGrps.some(({ grpId }) => grpId === chatId);
+
   const { isAdmin } = await getMemberData(sock, message, chatId);
   if (isAdmin || message.key.fromMe) {
+    const grpPermissions = [
+      {
+        title: `${tagAll ? ".rgp" : ".agp"} tagAll`,
+        description: `To ${
+          tagAll ? "disable" : "enable"
+        } this group for letting all members mention everyone like discord`,
+      },
+      {
+        title: `${tagAllAdminOnly ? ".rgp" : ".agp"} tagAllAdminOnly`,
+        description: `To ${
+          tagAllAdminOnly ? "disable" : "enable"
+        } this group for letting only admins mention everyone`,
+      },
+      {
+        title: `${roast ? ".rgp" : ".agp"} roast`,
+        description: `To ${
+          roast ? "disable" : "enable"
+        } this group for letting all members use roast command which may be nsfw`,
+      },
+    ];
+
     const sections = [
       {
         title: "Group Roles",
@@ -37,10 +49,10 @@ export const groupPerms = async (
     ];
 
     const listMessage = {
-      text: "Welcome to THE BOT\n\nSelect the Group Role for this group",
+      text: "Welcome to THE BOT\n\nGive or remove permissions from this group",
       footer: "This command is only for admins",
       title: "Click on the button below to view the list",
-      buttonText: "Group Roles",
+      buttonText: "Group Permissions",
       sections,
       viewOnce: true,
     };
@@ -51,7 +63,7 @@ export const groupPerms = async (
       await sock.sendMessage(
         chatId,
         {
-          text: "This command is used for choosing a group roles.\n\nIts available only for admins",
+          text: "This command is used for giving or removing group permissions.\n\nIts available only for admins",
         },
         { quoted: message }
       );
@@ -152,15 +164,6 @@ export const addGroupPermission = async (
     }
   }
 };
-
-export const showGroupPermissions = async (
-  sock: WASocket,
-  message: proto.IWebMessageInfo,
-  chatId: string,
-  tagAllGrps: grpArrayItem[],
-  tagAllAdminOnlyGrps: grpArrayItem[],
-  roastGrps: grpArrayItem[]
-) => {};
 
 export const removeGroupPermission = async (
   sock: WASocket,

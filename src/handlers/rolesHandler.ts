@@ -5,7 +5,6 @@ import {
   addGroupPermission,
   groupPerms,
   removeGroupPermission,
-  showGroupPermissions,
 } from "../helpers/rolesHelpers";
 import { queryHandler } from "./queryHandler";
 
@@ -23,7 +22,14 @@ export const rolesHandler = (
   switch (queryArray[0]) {
     ////////////////////////////////////GRP ROLES/////////////////////////////////
     case "gperms":
-      groupPerms(sock, message, chatId);
+      groupPerms(
+        sock,
+        message,
+        chatId,
+        tagAllGrps,
+        tagAllAdminOnlyGrps,
+        roastGrps
+      );
       break;
     ////////////////////////////////ADD GRP PERMISSION/////////////////////////////////
     case "agp":
@@ -38,22 +44,11 @@ export const rolesHandler = (
       );
       break;
     ///////////////////////////////REMOVE GRP PERMISSION/////////////////////////////////
-    case "rgr":
+    case "rgp":
       removeGroupPermission(
         sock,
         message,
         query,
-        chatId,
-        tagAllGrps,
-        tagAllAdminOnlyGrps,
-        roastGrps
-      );
-      break;
-    ///////////////////////////////SHOW GRP PERMISSIONS/////////////////////////////////
-    case "sgr":
-      showGroupPermissions(
-        sock,
-        message,
         chatId,
         tagAllGrps,
         tagAllAdminOnlyGrps,
