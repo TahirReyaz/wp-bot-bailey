@@ -17,23 +17,29 @@ export const fetchData = async () => {
     );
 
     const { grpPermissions, grpRoles } = botData;
-    for (const key in grpPermissions.tagAll) {
-      tagAllGrps.push({
-        grpId: grpPermissions.tagAll[key].grpId,
-        firebaseId: key,
-      });
+    if (grpPermissions?.tagAll) {
+      for (const key in grpPermissions.tagAll) {
+        tagAllGrps.push({
+          grpId: grpPermissions.tagAll[key].grpId,
+          firebaseId: key,
+        });
+      }
     }
-    for (const key in grpPermissions.tagAllAdminOnly) {
-      tagAllAdminOnlyGrps.push({
-        grpId: grpPermissions.tagAllAdminOnly[key].grpId,
-        firebaseId: key,
-      });
+    if (grpPermissions?.tagAllAdminOnly) {
+      for (const key in grpPermissions.tagAllAdminOnly) {
+        tagAllAdminOnlyGrps.push({
+          grpId: grpPermissions.tagAllAdminOnly[key].grpId,
+          firebaseId: key,
+        });
+      }
     }
-    for (const key in grpPermissions.roast) {
-      roastGrps.push({
-        grpId: grpPermissions.roast[key].grpId,
-        firebaseId: key,
-      });
+    if (grpPermissions?.roast) {
+      for (const key in grpPermissions.roast) {
+        roastGrps.push({
+          grpId: grpPermissions.roast[key].grpId,
+          firebaseId: key,
+        });
+      }
     }
   } catch (err) {
     console.log({ err });

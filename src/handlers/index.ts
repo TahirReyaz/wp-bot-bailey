@@ -22,7 +22,15 @@ export const readCommand = async (
   gamesHandler(sock, command, chatId);
   menuHandler(sock, command, chatId);
   entHandler(sock, command, chatId);
-  miscHandler(sock, message, command, chatId);
+  miscHandler(
+    sock,
+    message,
+    command,
+    chatId,
+    tagAllGrps,
+    tagAllAdminOnlyGrps,
+    roastGrps
+  );
   rolesHandler(
     sock,
     message,
