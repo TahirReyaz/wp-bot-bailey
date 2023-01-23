@@ -6,6 +6,7 @@ import {
   grpArrayItem,
   grpData,
   GrpPermissions,
+  grpPerms,
   updateGrpPermissions,
 } from "../../data/grpData";
 
@@ -91,6 +92,25 @@ export const addGroupPermission = async (
 
   if (isAdmin || message.key.fromMe) {
     grpArray = grpData.grpPermissions[query as keyof GrpPermissions];
+
+    // If the permission is not valid
+    if (!grpArray) {
+      try {
+        await sock.sendMessage(
+          chatId,
+          {
+            text: `${query} is not a valid permission\n\nCurrently available permissions are: ${Object.keys(
+              grpPerms
+            ).join(", ")}`,
+          },
+          { quoted: message }
+        );
+      } catch (warningErr) {
+        console.error("Error when sending warning: ", warningErr);
+      }
+      return;
+    }
+
     grpPresentAlready = grpArray.some(({ grpId }) => grpId === chatId);
 
     if (!grpPresentAlready) {
@@ -160,6 +180,24 @@ export const removeGroupPermission = async (
   if (isAdmin || message.key.fromMe) {
     grpArray = grpData.grpPermissions[query as keyof GrpPermissions];
 
+    // If the permission is not valid
+    if (!grpArray) {
+      try {
+        await sock.sendMessage(
+          chatId,
+          {
+            text: `${query} is not a valid permission\n\nCurrently available permissions are: ${Object.keys(
+              grpPerms
+            ).join(", ")}`,
+          },
+          { quoted: message }
+        );
+      } catch (warningErr) {
+        console.error("Error when sending warning: ", warningErr);
+      }
+      return;
+    }
+
     grpArray.forEach((grp) => {
       if (grp.grpId === chatId) {
         grpAbsent = false;
@@ -167,7 +205,7 @@ export const removeGroupPermission = async (
       }
     });
 
-    // If group doesnt have the selected role
+    // If group doesnt have the selected permission
     if (!grpAbsent) {
       try {
         await axios.delete(

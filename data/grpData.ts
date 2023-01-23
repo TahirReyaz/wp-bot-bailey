@@ -1,3 +1,9 @@
+export const grpPerms = {
+  tagAll: "tagAll",
+  tagAllAdminOnly: "tagAllAdminOnly",
+  roast: "roast",
+};
+
 export interface grpArrayItem {
   grpId: string;
   firebaseId: string;

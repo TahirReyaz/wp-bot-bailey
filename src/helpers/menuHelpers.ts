@@ -9,11 +9,6 @@ const botMenuList = [
         description: "For just getting a reply",
       },
       // {
-      //   title: ".poll <message>-<option 1>-<option 2>",
-      //   description:
-      //     "For creating polls. Example .poll Do you drink tea or coffee?-Tea-Coffee",
-      // },
-      // {
       //   title: ".talk Who are you",
       //   description: "To talk with an AI",
       // },
@@ -62,6 +57,11 @@ const botMenuList = [
       {
         title: ".ahelp ",
         description: "To get help and commands related to Anime",
+      },
+      {
+        title: ".rhelp ",
+        description:
+          "To get help and commands related to Roles and Permissions",
       },
     ],
   },
@@ -207,16 +207,22 @@ const roleMenuList = [
     title: "Role Commands",
     rows: [
       {
-        title: ".roles",
-        description: "To check the available roles in the group",
+        title: ".gperms ",
+        description: "To check the permissions in the group",
+      },
+      {
+        title: ".agp <permission>",
+        description: "To add a permission in the group | For ex- .agp tagAll",
+      },
+      {
+        title: ".rgp <permission>",
+        description:
+          "To remove a permission from the group | For ex- .rgp tagAll",
       },
     ],
   },
 ];
-const roleMenuMsg = [
-  "Checkout the menu for roles related commands",
-  "```There is no case sensitiviy for full commands```",
-];
+const roleMenuMsg = ["Checkout the menu for roles related commands"];
 
 export const sendMenu = async (
   sock: WASocket,
