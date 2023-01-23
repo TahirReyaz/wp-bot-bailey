@@ -109,9 +109,7 @@ export const sendRoast = async (
       } else {
         composeMsg = [
           "Roast from Bot\n-------------------------\n",
-          "Dear ",
-          query,
-          ", ",
+          query ? `Dear ${query}, ` : "",
           res.data.insult,
         ];
       }
