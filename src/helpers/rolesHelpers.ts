@@ -23,28 +23,41 @@ export const groupPerms = async (
     ),
     roast: boolean = grpData.grpPermissions.roast.some(
       ({ grpId }) => grpId === chatId
+    ),
+    nsfwAnimeDetails: boolean = grpData.grpPermissions.nsfwAnimeDetails.some(
+      ({ grpId }) => grpId === chatId
     );
 
   const { isAdmin } = await getMemberData(sock, message, chatId);
   if (isAdmin || message.key.fromMe) {
     const grpPermissions = [
       {
-        title: `${tagAll ? ".rgp" : ".agp"} tagAll`,
+        title: `${tagAll ? ".rgp" : ".agp"} ${grpPerms.tagAll}`,
         description: `To ${
           tagAll ? "disable" : "enable"
         } this group for letting all members mention everyone like discord`,
       },
       {
-        title: `${tagAllAdminOnly ? ".rgp" : ".agp"} tagAllAdminOnly`,
+        title: `${tagAllAdminOnly ? ".rgp" : ".agp"} ${
+          grpPerms.tagAllAdminOnly
+        }`,
         description: `To ${
           tagAllAdminOnly ? "disable" : "enable"
         } this group for letting only admins mention everyone`,
       },
       {
-        title: `${roast ? ".rgp" : ".agp"} roast`,
+        title: `${roast ? ".rgp" : ".agp"} ${grpPerms.roast}`,
         description: `To ${
           roast ? "disable" : "enable"
         } this group for letting all members use roast command which may be nsfw`,
+      },
+      {
+        title: `${nsfwAnimeDetails ? ".rgp" : ".agp"} ${
+          grpPerms.nsfwAnimeDetails
+        }`,
+        description: `To ${
+          nsfwAnimeDetails ? "disable" : "enable"
+        } this group for getting details of adult anime too`,
       },
     ];
 

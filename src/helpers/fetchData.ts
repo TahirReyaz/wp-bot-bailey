@@ -2,7 +2,11 @@ import axios, { AxiosResponse } from "axios";
 import { config } from "dotenv";
 config();
 
-import { grpArrayItem, updateGrpPermissions } from "../../data/grpData";
+import {
+  grpArrayItem,
+  grpPerms,
+  updateGrpPermissions,
+} from "../../data/grpData";
 
 export const fetchData = async () => {
   try {
@@ -13,7 +17,8 @@ export const fetchData = async () => {
     const { grpPermissions, grpRoles } = botData;
     const tagAllGrps: grpArrayItem[] = [],
       tagAllAdminOnlyGrps: grpArrayItem[] = [],
-      roastGrps: grpArrayItem[] = [];
+      roastGrps: grpArrayItem[] = [],
+      nsfwAnimeDetailsGrps: grpArrayItem[] = [];
 
     if (grpPermissions?.tagAll) {
       for (const key in grpPermissions.tagAll) {
@@ -22,7 +27,7 @@ export const fetchData = async () => {
           firebaseId: key,
         });
       }
-      updateGrpPermissions("tagAll", tagAllGrps);
+      updateGrpPermissions(grpPerms.tagAll, tagAllGrps);
     }
     if (grpPermissions?.tagAllAdminOnly) {
       for (const key in grpPermissions.tagAllAdminOnly) {
@@ -31,7 +36,7 @@ export const fetchData = async () => {
           firebaseId: key,
         });
       }
-      updateGrpPermissions("tagAllAdminOnly", tagAllAdminOnlyGrps);
+      updateGrpPermissions(grpPerms.tagAllAdminOnly, tagAllAdminOnlyGrps);
     }
     if (grpPermissions?.roast) {
       for (const key in grpPermissions.roast) {
@@ -40,7 +45,16 @@ export const fetchData = async () => {
           firebaseId: key,
         });
       }
-      updateGrpPermissions("roast", roastGrps);
+      updateGrpPermissions(grpPerms.roast, roastGrps);
+    }
+    if (grpPermissions?.nsfwAnimeDetails) {
+      for (const key in grpPermissions.nsfwAnimeDetails) {
+        nsfwAnimeDetailsGrps.push({
+          grpId: grpPermissions.nsfwAnimeDetails[key].grpId,
+          firebaseId: key,
+        });
+      }
+      updateGrpPermissions(grpPerms.nsfwAnimeDetails, nsfwAnimeDetailsGrps);
     }
   } catch (err) {
     console.log({ err });

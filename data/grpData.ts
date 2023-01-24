@@ -2,6 +2,7 @@ export const grpPerms = {
   tagAll: "tagAll",
   tagAllAdminOnly: "tagAllAdminOnly",
   roast: "roast",
+  nsfwAnimeDetails: "nsfwAnimeDetails",
 };
 
 export interface grpArrayItem {
@@ -13,6 +14,7 @@ export interface GrpPermissions {
   tagAll: grpArrayItem[];
   tagAllAdminOnly: grpArrayItem[];
   roast: grpArrayItem[];
+  nsfwAnimeDetails: grpArrayItem[];
 }
 
 interface GrpData {
@@ -25,6 +27,7 @@ export const grpData: GrpData = {
     tagAll: [],
     tagAllAdminOnly: [],
     roast: [],
+    nsfwAnimeDetails: [],
   },
   grpRoles: [],
 };

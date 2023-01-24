@@ -1,6 +1,7 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 import anilist from "anilist-node";
 import _ from "lodash";
+import { grpData } from "../../data/grpData";
 
 const Anilist = new anilist();
 // remove message argument wherever not needed
@@ -42,6 +43,23 @@ export const animeDetail = (
 ) => {
   let msg: any = [];
   Anilist.media.anime(Number(id)).then(async (data: any) => {
+    // Check if the group allows nsfw roats or not
+    const nsfwPerm: boolean = grpData.grpPermissions.nsfwAnimeDetails.some(
+      ({ grpId }) => grpId === chatId
+    );
+
+    if (data.isAdult && !nsfwPerm) {
+      await sock.sendMessage(
+        chatId,
+        {
+          text: "This anime is nsfw and the group doesn't allow nsfw anime details\n\nAsk admins for giving this permission to this group\n\nIf you are an admin yourself, then use .gperms command for activating this command in this group.",
+        },
+        { quoted: message }
+      );
+      return;
+    }
+
+    console.log({ data });
     // Compose the caption
     msg.push(...[`*Id* : ${data.id}`, `*MAL id* : ${data.idMal}`]);
     for (const title in data.title) {
@@ -59,14 +77,6 @@ export const animeDetail = (
         "",
         `*Description* : ${data.description}`,
       ]
-    );
-    // Send the warning
-    await sock.sendMessage(
-      chatId,
-      {
-        text: "As the current service's image processing is slow, the result might take some time or may not be sent at all",
-      },
-      { quoted: message }
     );
 
     // send the result
