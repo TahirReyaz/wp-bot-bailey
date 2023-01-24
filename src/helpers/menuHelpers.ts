@@ -1,4 +1,4 @@
-import { proto, WASocket } from "@adiwajshing/baileys";
+import { WASocket } from "@adiwajshing/baileys";
 
 const botMenuList = [
   {
@@ -35,10 +35,6 @@ const botMenuList = [
         title: "horoscopeMenu",
         description: "For checking out today's Horoscope\nShort command: .hsm",
       },
-      // {
-      //   title: "GroupRoles",
-      //   description: "For activating certain commands in a group (Admin only)",
-      // },
       {
         title: ".ihelp ",
         description:
@@ -66,7 +62,9 @@ const botMenuList = [
     ],
   },
 ];
-const botMenuMsg = ["Check out the bottom menu for commands👇"];
+const botMenuMsg = [
+  "Check out the bottom menu for commands👇\n\nTo report a bug or a feature request: https://github.com/TahirReyaz/wp-bot-bailey/issues",
+];
 
 const entMenuList = [
   {

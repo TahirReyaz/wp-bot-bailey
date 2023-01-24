@@ -261,6 +261,7 @@ export const infoHandler = async (
         "This is an open-source bot, so the code is available on github: https://github.com/TahirReyaz/wp-bot-bailey",
         "Go ahead and give some stars",
         "If there are no installation instructions, wait for him to upload them",
+        "If you want to report a bug or suggest a feature, you can do so here: https://github.com/TahirReyaz/wp-bot-bailey/issues",
       ];
       // Send the response to the sender
       await sock.sendMessage(
