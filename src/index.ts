@@ -49,16 +49,17 @@ async function connectToWhatsApp() {
 
   sock.ev.on("messages.upsert", async (m) => {
     const currentMessage = m.messages[0];
-    const convo = currentMessage.message?.conversation
-      ? currentMessage.message?.conversation
-      : currentMessage.message?.listResponseMessage?.title;
+    const convo =
+      currentMessage.message?.extendedTextMessage?.text ||
+      currentMessage.message?.conversation ||
+      currentMessage.message?.listResponseMessage?.title;
+
     const chatId: string = currentMessage?.key?.remoteJid || "meh";
 
     // Go to personal handler if its not a group message
     if (!currentMessage.participant) {
       personalHandler(sock, currentMessage, chatId);
     }
-
     if (convo && (convo[0] === "." || convo[0] === "@")) {
       console.log({ m: currentMessage.message });
       readCommand(sock, currentMessage, convo.substring(1), chatId);

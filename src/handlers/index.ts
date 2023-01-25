@@ -5,6 +5,7 @@ import { gamesHandler } from "./gamesHandler";
 import { infoHandler } from "./infoHandler";
 import { menuHandler } from "./menuHandler";
 import { miscHandler } from "./miscHandler";
+import { personalReplyHandler } from "./personalReplyHandler";
 import { rolesHandler } from "./rolesHandler";
 
 export const readCommand = async (
@@ -20,4 +21,5 @@ export const readCommand = async (
   entHandler(sock, command, chatId);
   miscHandler(sock, message, command, chatId);
   rolesHandler(sock, message, command, chatId);
+  personalReplyHandler(sock, message, command, chatId);
 };
