@@ -20,6 +20,11 @@ export const fetchData = async () => {
       `${process.env.FIREBASE_DOMAIN}/grpData.json`
     );
 
+    if (!botData) {
+      console.log("No group data found");
+      return;
+    }
+
     const { grpPermissions, grpRoles } = botData;
     const tagAllGrps: grpArrayItem[] = [],
       tagAllAdminOnlyGrps: grpArrayItem[] = [],
@@ -71,6 +76,11 @@ export const fetchData = async () => {
     const { data: botData }: AxiosResponse = await axios.get(
       `${process.env.FIREBASE_DOMAIN}/personal.json`
     );
+
+    if (!botData) {
+      console.log("No personal data found");
+      return;
+    }
 
     const { defaultReply, replies } = botData;
 

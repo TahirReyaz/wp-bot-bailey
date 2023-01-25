@@ -10,9 +10,9 @@ import { rolesHandler } from "./rolesHandler";
 export const readCommand = async (
   sock: WASocket,
   message: proto.IWebMessageInfo,
-  command: string
+  command: string,
+  chatId: string
 ) => {
-  const chatId: string = message?.key?.remoteJid || "meh";
   infoHandler(sock, message, command, chatId);
   animeHanlder(sock, message, command, chatId);
   gamesHandler(sock, command, chatId);

@@ -31,3 +31,8 @@ export const removeReply = (firebaseId: string) => {
 export const updateDefaultReply = (reply: string) => {
   personalData.defaultReply = reply;
 };
+
+export const findReply = (id: string) => {
+  const reply = personalData.replies.find((reply) => id.includes(reply.id));
+  return reply ? reply.reply : null;
+};

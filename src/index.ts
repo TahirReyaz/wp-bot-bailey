@@ -8,6 +8,7 @@ import MAIN_LOGGER from "@adiwajshing/baileys/lib/Utils/logger";
 
 import { readCommand } from "./handlers";
 import { fetchData } from "./helpers/fetchData";
+import { personalHandler } from "./handlers/personalHandler";
 
 const logger = MAIN_LOGGER.child({});
 logger.level = "trace";
@@ -51,9 +52,16 @@ async function connectToWhatsApp() {
     const convo = currentMessage.message?.conversation
       ? currentMessage.message?.conversation
       : currentMessage.message?.listResponseMessage?.title;
+    const chatId: string = currentMessage?.key?.remoteJid || "meh";
+
+    // Go to personal handler if its not a group message
+    if (!currentMessage.participant) {
+      personalHandler(sock, currentMessage, chatId);
+    }
+
     if (convo && (convo[0] === "." || convo[0] === "@")) {
       console.log({ m: currentMessage.message });
-      readCommand(sock, currentMessage, convo.substring(1));
+      readCommand(sock, currentMessage, convo.substring(1), chatId);
     }
   });
 }
