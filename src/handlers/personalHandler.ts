@@ -8,7 +8,8 @@ export const personalHandler = async (
   chatId: string
 ) => {
   const reply: string | null = findReply(chatId);
-  if (reply && !message.key.fromMe) {
+
+  if (reply && !message.key.fromMe && !message.key.participant) {
     try {
       await sock.sendMessage(chatId, { text: reply }, { quoted: message });
     } catch (replyErr) {

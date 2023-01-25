@@ -9,6 +9,9 @@ export const addDefaultReply = async (
   id: string,
   reply: string
 ) => {
+  if (!message.key.fromMe) {
+    return;
+  }
   try {
     const { data }: AxiosResponse = await axios.post(
       `${process.env.FIREBASE_DOMAIN}/personal/replies.json`,
@@ -34,7 +37,10 @@ export const removeDefaultReply = async (
   chatId: string,
   id: string
 ) => {
-  console.log({ id });
+  if (!message.key.fromMe) {
+    return;
+  }
+
   const reply = personalData.replies.find(({ id: replyId }) => {
     let found: boolean = false;
     if (id.length >= 5) {

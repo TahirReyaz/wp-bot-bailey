@@ -56,10 +56,8 @@ async function connectToWhatsApp() {
 
     const chatId: string = currentMessage?.key?.remoteJid || "meh";
 
-    // Go to personal handler if its not a group message
-    if (!currentMessage.participant) {
-      personalHandler(sock, currentMessage, chatId);
-    }
+    personalHandler(sock, currentMessage, chatId);
+
     if (convo && (convo[0] === "." || convo[0] === "@")) {
       console.log({ m: currentMessage.message });
       readCommand(sock, currentMessage, convo.substring(1), chatId);
