@@ -7,8 +7,14 @@ import {
   grpPerms,
   updateGrpPermissions,
 } from "../../data/grpData";
+import {
+  Reply,
+  updateDefaultReply,
+  updateReplies,
+} from "../../data/personalData";
 
 export const fetchData = async () => {
+  // Group data
   try {
     const { data: botData }: AxiosResponse = await axios.get(
       `${process.env.FIREBASE_DOMAIN}/grpData.json`
@@ -55,6 +61,33 @@ export const fetchData = async () => {
         });
       }
       updateGrpPermissions(grpPerms.nsfwAnimeDetails, nsfwAnimeDetailsGrps);
+    }
+  } catch (err) {
+    console.log({ err });
+  }
+
+  // Personal data
+  try {
+    const { data: botData }: AxiosResponse = await axios.get(
+      `${process.env.FIREBASE_DOMAIN}/personal.json`
+    );
+
+    const { defaultReply, replies } = botData;
+
+    if (defaultReply?.length > 0) {
+      updateDefaultReply(defaultReply);
+    }
+    if (replies) {
+      const newReplies: Reply[] = [];
+
+      for (const key in replies) {
+        newReplies.push({
+          id: replies[key].id,
+          reply: replies[key].reply,
+          firebaseId: key,
+        });
+      }
+      updateReplies(newReplies);
     }
   } catch (err) {
     console.log({ err });
