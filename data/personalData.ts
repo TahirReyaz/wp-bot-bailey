@@ -7,11 +7,13 @@ export interface Reply {
 interface PersonalData {
   defaultReply: string;
   replies: Reply[];
+  enableReply: boolean;
 }
 
 export const personalData: PersonalData = {
   defaultReply: "",
   replies: [],
+  enableReply: false,
 };
 
 export const updateReplies = (newReplies: Reply[]) => {
@@ -30,6 +32,10 @@ export const removeReply = (firebaseId: string) => {
 
 export const updateDefaultReply = (reply: string) => {
   personalData.defaultReply = reply;
+};
+
+export const togglePermission = (permission: boolean) => {
+  personalData.enableReply = permission;
 };
 
 export const findReply = (id: string) => {

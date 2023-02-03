@@ -2,6 +2,7 @@ import { proto, WASocket } from "@adiwajshing/baileys";
 import {
   addDefaultReply,
   removeDefaultReply,
+  toggleReplyPermission,
 } from "../helpers/personalReplyHelpers";
 import { queryHandler } from "./queryHandler";
 
@@ -18,6 +19,12 @@ export const personalReplyHandler = async (
       break;
     case "rdr":
       removeDefaultReply(sock, message, chatId, query);
+      break;
+    case "edr":
+      toggleReplyPermission(sock, message, chatId, true);
+      break;
+    case "ddr":
+      toggleReplyPermission(sock, message, chatId, false);
       break;
   }
 };

@@ -1,6 +1,11 @@
 import { proto, WASocket } from "@adiwajshing/baileys";
 import axios, { AxiosResponse } from "axios";
-import { addReply, personalData, removeReply } from "../../data/personalData";
+import {
+  addReply,
+  personalData,
+  removeReply,
+  togglePermission,
+} from "../../data/personalData";
 
 export const addDefaultReply = async (
   sock: WASocket,
@@ -69,6 +74,30 @@ export const removeDefaultReply = async (
     await sock.sendMessage(
       chatId,
       { text: "Deleted default reply for this number" },
+      { quoted: message }
+    );
+  } catch (firebaseErr) {
+    console.error({ firebaseErr });
+  }
+};
+
+export const toggleReplyPermission = async (
+  sock: WASocket,
+  message: proto.IWebMessageInfo,
+  chatId: string,
+  permission: boolean
+) => {
+  if (!message.key.fromMe) {
+    return;
+  }
+  try {
+    await axios.patch(`${process.env.FIREBASE_DOMAIN}/personal.json`, {
+      permission,
+    });
+    togglePermission(permission);
+    await sock.sendMessage(
+      chatId,
+      { text: `Reply permission set to ${permission}` },
       { quoted: message }
     );
   } catch (firebaseErr) {

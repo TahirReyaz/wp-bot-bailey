@@ -9,6 +9,7 @@ import {
 } from "../../data/grpData";
 import {
   Reply,
+  togglePermission,
   updateDefaultReply,
   updateReplies,
 } from "../../data/personalData";
@@ -82,10 +83,13 @@ export const fetchData = async () => {
       return;
     }
 
-    const { defaultReply, replies } = botData;
+    const { defaultReply, replies, permission } = botData;
 
     if (defaultReply?.length > 0) {
       updateDefaultReply(defaultReply);
+    }
+    if (permission) {
+      togglePermission(permission);
     }
     if (replies) {
       const newReplies: Reply[] = [];
