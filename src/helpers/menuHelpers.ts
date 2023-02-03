@@ -59,11 +59,6 @@ const botMenuList = [
         description:
           "To get help and commands related to Roles and Permissions",
       },
-      {
-        title: ".rhelp ",
-        description:
-          "To get help and commands related to Roles and Permissions",
-      },
     ],
   },
 ];

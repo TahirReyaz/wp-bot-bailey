@@ -15,7 +15,7 @@ export const miscHandler = async (
     case "hi":
       await sock.sendMessage(
         chatId,
-        { text: "All hail the bot!" },
+        { text: "All hail the bot!\n\nSend .help for commands" },
         { quoted: message }
       );
       break;
