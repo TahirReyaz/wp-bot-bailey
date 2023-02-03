@@ -59,6 +59,11 @@ const botMenuList = [
         description:
           "To get help and commands related to Roles and Permissions",
       },
+      {
+        title: ".rhelp ",
+        description:
+          "To get help and commands related to Roles and Permissions",
+      },
     ],
   },
 ];
@@ -222,6 +227,35 @@ const roleMenuList = [
 ];
 const roleMenuMsg = ["Checkout the menu for roles related commands"];
 
+const personalMenuList = [
+  {
+    title: "Personal Commands",
+    rows: [
+      {
+        title: ".edr ",
+        description: "To enable default replies in DMs",
+      },
+      {
+        title: ".ddr ",
+        description: "To disable default replies in DMs",
+      },
+      {
+        title: ".adr <phone number>-<reply>",
+        description:
+          "To add a default reply for a contact | For ex- .adr 1234567890-Please wait, I'll call you back",
+      },
+      {
+        title: ".rdr <phone number>",
+        description:
+          "To remove a default reply for a contact | For ex- .rdr 1234567890",
+      },
+    ],
+  },
+];
+const personalMenuMsg = [
+  "Checkout the menu for commands related to personal use, such as default replies",
+];
+
 export const sendMenu = async (
   sock: WASocket,
   title: string,
@@ -254,6 +288,10 @@ export const sendMenu = async (
     case "Role":
       sections = roleMenuList;
       msg = roleMenuMsg;
+      break;
+    case "Personal":
+      sections = personalMenuList;
+      msg = personalMenuMsg;
       break;
     default:
       sections = botMenuList;

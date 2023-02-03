@@ -34,5 +34,8 @@ export const menuHandler = async (
     case "rhelp":
       sendMenu(sock, "Roles related commands", "Role", chatId);
       break;
+    case "phelp":
+      sendMenu(sock, "Commands related to Personal use", "Personal", chatId);
+      break;
   }
 };
